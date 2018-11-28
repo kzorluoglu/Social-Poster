@@ -14,7 +14,7 @@ Social Poster is a simple Facebook Page and Twitt poster
 Social Poster uses a number of open source projects to work properly:
 
 * [facebook/graph-sdk] - Facebook SDK for PHP (v5)
-* [dg/twitter-php] - awesome web-based text editor
+* [dg/twitter-php] - Twitter for PHP is a very small and easy-to-use library for sending messages to Twitter and receiving status updates.
 * [dillinger.io] - Markdown editor for this readme.md creating/editing. Fast and easy to extend.
 * [Twitter Bootstrap] - great UI boilerplate for modern web apps
 * [jQuery] - duh
