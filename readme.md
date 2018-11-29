@@ -5,6 +5,9 @@ Social Poster is a simple Facebook Page and Twitt poster
   - Text Posting
   - Text with Image-\s Posting
 
+# Screenshots
+![Screenshot](https://i.ibb.co/YcGvnt9/Screens.png)
+
 # New Features?
 
   - Please create new Issue.
