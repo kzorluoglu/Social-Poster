@@ -1,6 +1,6 @@
 {
     "name": "d8devs/socialposter",
-    "description": "Social Poster is a simple Facebook Page and Twitt poster",
+    "description": "Social Poster is a simple for Multi Facebook Pages and Twitter Accounts poster",
     "type": "project",
     "require-dev": {
         "phpunit/phpunit": "6"
