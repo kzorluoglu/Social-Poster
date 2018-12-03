@@ -22,6 +22,9 @@ Social Poster uses a number of open source projects to work properly:
 * [Twitter Bootstrap] - great UI boilerplate for modern web apps
 * [jQuery] - duh
 
+### Standarts
+
+* PSR-2
 
 ### Installation
 
