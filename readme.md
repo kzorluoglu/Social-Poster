@@ -1,6 +1,6 @@
 # Social Poster -  Multi Accounts/Pages Poster for Social Media
 
-Social Poster is a simple Post with Images/Videos/File sendder for Facebook Pages and Twitter Accounts
+Social Poster is a simple Post with Images/Videos/File sender for Facebook Pages and Twitter Accounts
 
   - Text Posting for Multiple Pages and Accounts
   - Text with Image-\s Posting for Multiple Pages and Accounts
