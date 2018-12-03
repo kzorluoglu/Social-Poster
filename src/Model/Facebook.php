@@ -1,5 +1,4 @@
 <?php
-
 namespace d8devs\socialposter\Model;
 
 /**
@@ -7,7 +6,8 @@ namespace d8devs\socialposter\Model;
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class Facebook {
+class Facebook
+{
 
     protected $page;
     protected $app_id;
@@ -15,7 +15,8 @@ class Facebook {
     protected $default_graph_version;
     protected $accessToken;
 
-    public function __construct($page, $app_id, $app_secret, $default_graph_version, $accessToken) {
+    public function __construct($page, $app_id, $app_secret, $default_graph_version, $accessToken)
+    {
         $this->page = $page;
         $this->app_id = $app_id;
         $this->app_secret = $app_secret;
@@ -23,24 +24,28 @@ class Facebook {
         $this->accessToken = $accessToken;
     }
 
-    function getPage() {
+    public function getPage()
+    {
         return $this->page;
     }
 
-    function getAppId() {
+    public function getAppId()
+    {
         return $this->app_id;
     }
 
-    function getAppSecret() {
+    public function getAppSecret()
+    {
         return $this->app_secret;
     }
 
-    function getDefaultGraphVersion() {
+    public function getDefaultGraphVersion()
+    {
         return $this->default_graph_version;
     }
 
-    function getAccessToken() {
+    public function getAccessToken()
+    {
         return $this->accessToken;
     }
-
 }

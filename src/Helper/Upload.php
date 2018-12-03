@@ -1,5 +1,4 @@
 <?php
-
 namespace d8devs\socialposter\Helper;
 
 /**
@@ -7,19 +6,21 @@ namespace d8devs\socialposter\Helper;
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class Upload {
-
+class Upload
+{
     protected $allowedTypes = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
     protected $files;
     protected $uploadedFiles;
     protected $uploadDirectory = "/var/www/uploads/";
 
-    function setFiles(array $files) {
+    public function setFiles(array $files)
+    {
 
         $this->files = $this->reArray($files);
     }
 
-    function reArray($files) {
+    private function reArray($files)
+    {
         $newArray = array();
         for ($i = 0; $i < count($files['name']); $i++) {
             $newArray[$i]['name'] = $files['name'][$i];
@@ -31,9 +32,9 @@ class Upload {
         return $newArray;
     }
 
-    function uploadFiles() {
+    public function uploadFiles()
+    {
         foreach ($this->files as $file) {
-
             if ($this->isAllowed($file['type'])) {
                 $filepath = $this->uploadDirectory . basename($file['name']);
                 $upload = move_uploaded_file($file['tmp_name'], $filepath);
@@ -44,12 +45,13 @@ class Upload {
         }
     }
 
-    function isAllowed($file_type) {
+    private function isAllowed($file_type)
+    {
         return in_array($file_type, $this->allowedTypes);
     }
 
-    function getUploadedFiles() {
+    public function getUploadedFiles()
+    {
         return $this->uploadedFiles;
     }
-
 }

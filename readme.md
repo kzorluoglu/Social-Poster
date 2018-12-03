@@ -84,6 +84,15 @@ Twitter
 
  - Write Tests
 
+### Tests & Coding standard
+
+```
+# Run PHPUnit
+./vendor/bin/phpunit
+# Run PHP_CodeSniffer
+./vendor/bin/phpcs
+```
+
 License
 ----
 

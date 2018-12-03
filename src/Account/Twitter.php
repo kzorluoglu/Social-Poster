@@ -1,5 +1,4 @@
 <?php
-
 namespace d8devs\socialposter\Account;
 
 use d8devs\socialposter\Model\TwitterUser;
@@ -9,24 +8,24 @@ use d8devs\socialposter\Model\TwitterUser;
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class Twitter {
-
+class Twitter
+{
     protected $accounts;
 
-    public function __construct() {
-
-        $this->addAccount(new TwitterUser(
-                'yourConsumerKey', 'yourConsumerSecretkey', 'yourAccessToken', 'yourAccesTokenSecret'
-        ));
-
+    public function __construct()
+    {
+        $this->addAccount(
+            new TwitterUser('yourConsumerKey', 'yourConsumerSecretkey', 'yourAccessToken', 'yourAccesTokenSecret')
+        );
     }
 
-    function addAccount(TwitterUser $user) {
+    private function addAccount(TwitterUser $user)
+    {
         $this->accounts[] = $user;
     }
 
-    public function getAccounts() {
+    public function getAccounts()
+    {
         return $this->accounts;
     }
-
 }
