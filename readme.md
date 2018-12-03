@@ -90,7 +90,8 @@ Twitter
 # Run PHPUnit
 ./vendor/bin/phpunit
 # Run PHP_CodeSniffer
-./vendor/bin/phpcs -h
+./vendor/bin/phpcs
+```
 
 License
 ----
