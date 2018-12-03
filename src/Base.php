@@ -1,5 +1,4 @@
 <?php
-
 namespace d8devs\socialposter;
 
 /**
@@ -7,18 +6,21 @@ namespace d8devs\socialposter;
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class Base {
-
-    public function __construct() {
+class Base
+{
+    public function __construct()
+    {
         $page = "";
 
         if (isset($_GET['page'])) {
-            $page = $this->simpleSecure($_GET['page']);
+            $page = $this->filterGET();
         }
+
         $this->get($page);
     }
 
-    public function get($page) {
+    public function get($page)
+    {
         if ($page == "twitter") {
             new Controller\TwitterController();
         }
@@ -30,11 +32,13 @@ class Base {
         }
     }
 
-    function simpleSecure($page = null) {
-        return  filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
+    private function filterGET()
+    {
+        return filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
     }
 
-    public function render($template, array $data = []) {
+    public function render($template, array $data = [])
+    {
         if ($data) {
             extract($data);
         }
@@ -43,5 +47,4 @@ class Base {
         $file = ob_get_clean();
         echo $file;
     }
-
 }

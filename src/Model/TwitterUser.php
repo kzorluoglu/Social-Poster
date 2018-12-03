@@ -1,5 +1,4 @@
 <?php
-
 namespace d8devs\socialposter\Model;
 
 /**
@@ -7,34 +6,39 @@ namespace d8devs\socialposter\Model;
  *
  * @author Koray Zorluoglu
  */
-class TwitterUser {
+class TwitterUser
+{
 
     protected $consumerKey;
     protected $consumerSecret;
     protected $accessToken;
     protected $accessTokenSecret;
 
-    public function __construct($consumerKey, $consumerSecret, $accessToken = null, $accessTokenSecret = null) {
+    public function __construct($consumerKey, $consumerSecret, $accessToken = null, $accessTokenSecret = null)
+    {
         $this->consumerKey = $consumerKey;
         $this->consumerSecret = $consumerSecret;
         $this->accessToken = $accessToken;
         $this->accessTokenSecret = $accessTokenSecret;
     }
 
-    function getConsumerKey() {
+    public function getConsumerKey()
+    {
         return $this->consumerKey;
     }
 
-    function getConsumerSecret() {
+    public function getConsumerSecret()
+    {
         return $this->consumerSecret;
     }
 
-    function getAccessToken() {
+    public function getAccessToken()
+    {
         return $this->accessToken;
     }
 
-    function getAccessTokenSecret() {
+    public function getAccessTokenSecret()
+    {
         return $this->accessTokenSecret;
     }
-
 }

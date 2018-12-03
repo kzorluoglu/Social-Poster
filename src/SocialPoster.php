@@ -1,5 +1,4 @@
 <?php
-
 namespace d8devs\socialposter;
 
 use Account\Twitter as TwitterAccount;
@@ -12,29 +11,34 @@ use Facebook\Facebook;
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class SocialPoster {
+class SocialPoster
+{
 
     protected $report;
 
-    public function twitter($message, array $images = null) {
-
+    public function twitter($message, array $images = null)
+    {
         $users = new TwitterAccount();
 
         foreach ($users->getAccounts() as $user) {
-            $user = new Twitter($user->getConsumerKey(), $user->getConsumerSecret(), $user->getAccessToken(), $user->getAccessTokenSecret());
+            $twitterAPI = new Twitter(
+                $user->getConsumerKey(),
+                $user->getConsumerSecret(),
+                $user->getAccessToken(),
+                $user->getAccessTokenSecret()
+            );
             if ($images) {
-                $this->report[] = $user->send($message, $images);
+                $this->report[] = $twitterAPI->send($message, $images);
             } else {
-                $this->report[] = $user->send($message);
+                $this->report[] = $twitterAPI->send($message);
             }
         }
     }
 
-    public function facebook($message, array $images = null) {
-
+    public function facebook($message, array $images = null)
+    {
         $facebooks = new FacebookPage();
         foreach ($facebooks->getAccounts() as $facebook) {
-
             $fb = new Facebook([
                 'app_id' => $facebook->getAppId(),
                 'app_secret' => $facebook->getAppSecret(),
@@ -44,7 +48,6 @@ class SocialPoster {
             $fb->setDefaultAccessToken($facebook->getAccessToken());
 
             if ($images) {
-
                 $this->report[] = $fb->sendRequest('POST', $facebook->getPage() . "/feed", [
                     'message' => $message,
                     'attached_media' => $this->facebookImageUpload($images, $fb, $facebook->getPage())
@@ -57,14 +60,15 @@ class SocialPoster {
         }
     }
 
-    public function getReport() {
+    public function getReport()
+    {
         return $this->report;
     }
 
-    function facebookImageUpload($images, $facebook, $page) {
+    private function facebookImageUpload($images, $facebook, $page)
+    {
         $post_images = array();
         foreach ($images as $image) {
-
             $response = $facebook->sendRequest('POST', $page . "/photos", [
                 'source' => $facebook->fileToUpload($image),
                 'published' => 'false'
@@ -80,5 +84,4 @@ class SocialPoster {
         }
         return $attachedMedia;
     }
-
 }

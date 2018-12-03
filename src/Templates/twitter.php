@@ -1,16 +1,18 @@
-<?php require 'layout/header.php'; ?>
+<?php
+    require 'layout/header.php';
+?>
 <div class="container">
 
-    <?php if ($error_message): ?>
+    <?php if ($error_message) : ?>
         <div class="alert alert-danger" role="alert">
             <?php echo $error_message; ?>
         </div>
     <?php endif; ?>
 
-    <?php if ($reports): ?>
+    <?php if ($reports) : ?>
         <div class="alert alert-success" role="alert">
             Twitt sent to these addresses: <br>
-            <?php foreach ($reports as $report): ?>
+            <?php foreach ($reports as $report) : ?>
                 <?php echo $report->user->name; ?> (<?php echo $report->created_at; ?>)<br>
             <?php endforeach; ?>
         </div>

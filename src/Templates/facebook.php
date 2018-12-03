@@ -1,20 +1,21 @@
-<?php require 'layout/header.php'; ?>
+<?php
+    require 'layout/header.php';
+?>
 <div class="container">
-
-    <?php if ($error_message): ?>
+    <?php if ($error_message) : ?>
         <div class="alert alert-danger" role="alert">
             <?php echo $error_message; ?>
         </div>
     <?php endif; ?>
 
-    <?php if ($reports): ?>
+<?php if ($reports) : ?>
         <div class="alert alert-success" role="alert">
             Message sent to these addresses: <br>
-            <?php foreach ($reports as $report): ?>
+            <?php foreach ($reports as $report) : ?>
                 <?php echo $report->user->name; ?> (<?php echo $report->created_at; ?>)<br>
             <?php endforeach; ?>
         </div>
-    <?php endif; ?>
+<?php endif; ?>
 
     <form  method="post" enctype="multipart/form-data">
         <div class="form-group">
@@ -28,7 +29,7 @@
         </div>
         <button type="submit" class="btn btn-primary">Send</button>
     </form>        
-  
+
 </div>
 
 <?php require 'layout/footer.php'; ?>
