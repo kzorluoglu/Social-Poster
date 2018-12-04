@@ -1,6 +1,6 @@
-# Social Poster -  Multi Accounts/Pages Poster for Social Media
+# Social Poster [![Build Status](https://travis-ci.com/kzorluoglu/socialposter.svg?branch=master)](https://travis-ci.com/kzorluoglu/socialposter)
 
-Social Poster is a simple Post with Images/Videos/File sender for Facebook Pages and Twitter Accounts
+Social Poster is a simple Post with Images/Videos/File sender for Multi Accounts/Pages (Facebook Pages and Twitter Accounts)
 
   - Text Posting for Multiple Pages and Accounts
   - Text with Image-\s Posting for Multiple Pages and Accounts
