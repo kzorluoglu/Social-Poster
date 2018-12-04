@@ -14,19 +14,19 @@ class Base
 
     /** @var type FacebookController|IndexController|TwitterController|   */
     private $pageController;
-    
-    /** @var renderFile Html **/
+
+    /** @var renderFile Html * */
     private $renderFile;
-    
+
     public function __construct()
     {
         if (isset($_GET['page'])) {
             $route = $this->filterString($_GET['page']);
         }
-        if(empty($_GET['page'])){
+        if (empty($_GET['page'])) {
             $route = '';
         }
-        
+
         $this->setRoute($route);
         $this->get();
     }
@@ -59,7 +59,7 @@ class Base
     {
         return $this->route;
     }
-    
+
     public function __toString()
     {
         return $this->pageController;
@@ -74,12 +74,13 @@ class Base
         require __DIR__ . '/Templates/' . $template . '.php';
         $this->renderFile = ob_get_clean();
     }
-    
+
     /**
      * Run
      * @return mixed
      */
-    public function run(){
+    public function run()
+    {
         echo $this->renderFile;
     }
 }
