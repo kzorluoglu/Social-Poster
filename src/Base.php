@@ -8,33 +8,61 @@ namespace d8devs\socialposter;
  */
 class Base
 {
+
+    /** @var type string   */
+    private $route;
+
+    /** @var type FacebookController|IndexController|TwitterController|   */
+    private $pageController;
+    
+    /** @var renderFile Html **/
+    private $renderFile;
+    
     public function __construct()
     {
-        $page = "";
-
         if (isset($_GET['page'])) {
-            $page = $this->filterGET();
+            $route = $this->filterString($_GET['page']);
         }
-
-        $this->get($page);
+        if(empty($_GET['page'])){
+            $route = '';
+        }
+        
+        $this->setRoute($route);
+        $this->get();
     }
 
-    public function get($page)
+    public function get()
     {
-        if ($page == "twitter") {
-            new Controller\TwitterController();
+        if ($this->route == "twitter") {
+            $this->pageController = new Controller\TwitterController();
         }
-        if ($page == "facebook") {
-            new Controller\FacebookController();
+        if ($this->route == "facebook") {
+            $this->pageController = new Controller\FacebookController();
         }
-        if ($page == '') {
-            new Controller\IndexController();
+        if ($this->route == '') {
+            $this->pageController = new Controller\IndexController();
         }
+        return $this->pageController;
     }
 
-    private function filterGET()
+    public function filterString($string)
     {
-        return filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
+        return filter_var($string, FILTER_SANITIZE_STRING);
+    }
+
+    public function setRoute($route)
+    {
+        $this->route = $route;
+    }
+
+    public function getRoute()
+    {
+        return $this->route;
+    }
+    
+    public function __toString()
+    {
+        return $this->pageController;
     }
 
     public function render($template, array $data = [])
@@ -44,7 +72,14 @@ class Base
         }
         ob_start();
         require __DIR__ . '/Templates/' . $template . '.php';
-        $file = ob_get_clean();
-        echo $file;
+        $this->renderFile = ob_get_clean();
+    }
+    
+    /**
+     * Run
+     * @return mixed
+     */
+    public function run(){
+        echo $this->renderFile;
     }
 }
