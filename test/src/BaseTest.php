@@ -15,7 +15,7 @@ class BaseTest extends TestCase
     /** @var \d8devs\socialposter\Base */
     private static $base;
 
-    private static function setUpBeforeClass()
+    public static function setUpBeforeClass()
     {
         self::$base = new Base();
     }
