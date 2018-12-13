@@ -16,17 +16,11 @@ use d8devs\socialposter\Database;
 class IndexController extends Base
 {
 
-    /** @var array d8devs\socialposter\Model\Post[] */
-    private $posts;
-
-    /** @var Database **/
-    private $db;
-
-    public function __construct()
-    {
-        $dbInstance = Database::getInstance();
-        $this->db = $dbInstance->getConnection();
-    }
+  /**
+   * Sender Class
+   * @var [FacebookController|TwitterController]
+   */
+    private $sender;
 
     public function index()
     {
@@ -38,6 +32,7 @@ class IndexController extends Base
             foreach ($posts as $post) {
                 $this->send($post);
             }
+            $this->prettyDebug($posts);
         }
 
         $this->render('index');
@@ -48,47 +43,28 @@ class IndexController extends Base
         $posts = array();
 
         foreach ($formattedPostRequest as $post) {
-            $posts[] = new Post($post['for'], $post['target'], $post['message'], $files);
+            $post = new Post($post['for'], $post['target'], $post['message'], $files);
+            $post->setReport('created_at', strtotime('now'));
+            $posts[] = $post;
         }
         return $posts;
     }
 
     public function send(Post $post)
     {
-        $insert = "INSERT INTO posts (for, target, message, attachments, status, sended_at, created_at)
-                VALUES (:for, :target, :message, :attachments, :status, :sended_at, :created_at)";
-
-        $statment = $this->db->prepare($insert);
-        $statment->bindParam(':for', $for);
-        $statment->bindParam(':target', $target);
-        $statment->bindParam(':message', $message);
-        $statment->bindParam(':attachments', $attachments);
-        $statment->bindParam(':status', $status);
-        $statment->bindParam(':sended_at', $sendedAt);
-        $statment->bindParam(':created_at', $createdAt);
-
-        $for = $post->getFor();
-        $target = $post->getTarget();
-        $message = $post->getMessage();
-        $attachments = serialize($post->getAttachments());
         $createdAt = strtotime('now');
 
         if ($post->getTarget() == "facebook_page") {
-            $sender = new FacebookController();
-            $status = $sender->send($post);
+            $this->sender = new FacebookController();
         }
 
         if ($post->getTarget() == "twitter_account") {
-            $sender = new TwitterController();
-            $status = $sender->send($post);
+            $this->sender = new TwitterController();
         }
 
-        if ($status) {
-            $sendedAt = strtotime('now');
+        if ($sender->send($post)) {
+            $post->setReport('sended_at', strtotime('now'));
         }
-        $statment->execute();
-
-        return $status;
     }
 
     public function formatPostRequest(array $posts)

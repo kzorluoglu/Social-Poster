@@ -3,7 +3,6 @@ namespace d8devs\socialposter\Controller;
 
 use Facebook\Facebook;
 use d8devs\socialposter\Base;
-use d8devs\socialposter\Database;
 use d8devs\socialposter\Model\Post;
 
 /**
@@ -14,33 +13,25 @@ use d8devs\socialposter\Model\Post;
 class FacebookController
 {
 
-    /** @var Database **/
-    private $db;
-
-    public function __construct()
-    {
-        $dbInstance = Database::getInstance();
-    }
-
     public function send(Post $post)
     {
         $facebookInformation = $this->getFacebookInformation($post);
 
         $fb = new Facebook([
-            'app_id' => $facebook->getAppId(),
-            'app_secret' => $facebook->getAppSecret(),
-            'default_graph_version' => $facebook->getDefaultGraphVersion()
+            'app_id' => $facebookInformation->getAppId(),
+            'app_secret' => $facebookInformation->getAppSecret(),
+            'default_graph_version' => $facebookInformation->getDefaultGraphVersion()
         ]);
 
-        $fb->setDefaultAccessToken($facebook->getAccessToken());
+        $fb->setDefaultAccessToken($facebookInformation->getAccessToken());
 
         if ($post->getAttachments()) {
-            $this->report[] = $fb->sendRequest('POST', $facebook->getPage() . "/feed", [
+            $this->report[] = $fb->sendRequest('POST', $facebookInformation->getPage() . "/feed", [
                 'message' => $post->getPost(),
-                'attached_media' => $this->imageUpload($post->getAttachments(), $fb, $facebook->getPage())
+                'attached_media' => $this->imageUpload($post->getAttachments(), $fb, $facebookInformation->getPage())
             ]);
         } else {
-            $this->report[] = $fb->sendRequest('POST', $facebook->getPage() . "/feed", [
+            $this->report[] = $fb->sendRequest('POST', $facebookInformation->getPage() . "/feed", [
                 'message' => $post->getPost()
             ]);
         }

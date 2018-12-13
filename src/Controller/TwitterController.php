@@ -16,11 +16,12 @@ class TwitterController extends Base
 
     public function send(Post $post)
     {
+
         $twitterAPI = new Twitter(
-            $user->getConsumerKey(),
-            $user->getConsumerSecret(),
-            $user->getAccessToken(),
-            $user->getAccessTokenSecret()
+            'getConsumerKey',
+            'getConsumerSecret',
+            'getAccessToken',
+            'getAccessTokenSecret'
         );
         if ($post->getAttachments()) {
             return $twitterAPI->send($post->getPost(), $post->getAttachments());
