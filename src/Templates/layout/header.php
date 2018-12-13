@@ -32,12 +32,6 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="index.php">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=twitter">Twitter Poster</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=facebook">Facebook Poster</a>
-                    </li>
                 </ul>
             </div>
         </nav>

@@ -1,48 +1,53 @@
 <?php
 namespace d8devs\socialposter;
 
+use d8devs\socialposter\Controller\FacebookController;
+use d8devs\socialposter\Controller\IndexController;
+use d8devs\socialposter\Controller\TwitterController;
+use d8devs\socialposter\Interfaces\Controller;
+use d8devs\socialposter\Database;
+
 /**
  * Description of Base
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class Base
+class Base implements Controller
 {
 
-    /** @var type string   */
+    /** @var string   */
     private $route;
 
-    /** @var type FacebookController|IndexController|TwitterController|   */
+    /** @var FacebookController|IndexController|TwitterController   */
     private $pageController;
 
-    /** @var renderFile Html * */
+    /** @var mixed * */
     private $renderFile;
 
     public function __construct()
     {
         if (isset($_GET['page'])) {
-            $route = $this->filterString($_GET['page']);
+            $this->setRoute($this->filterString($_GET['page']));
         }
         if (empty($_GET['page'])) {
-            $route = '';
+            $this->setRoute('');
         }
 
-        $this->setRoute($route);
         $this->get();
     }
 
-    public function get()
+    private function get()
     {
-        if ($this->route == "twitter") {
-            $this->pageController = new Controller\TwitterController();
+        $class = $this->getRoute();
+        $controller = "d8devs\socialposter\Controller\\{$class}Controller";
+        if (! class_exists($controller)) {
+            $this->pageController = new Exceptions\NotFound();
         }
-        if ($this->route == "facebook") {
-            $this->pageController = new Controller\FacebookController();
+        if (class_exists($controller)) {
+            $this->pageController = new $controller();
         }
-        if ($this->route == '') {
-            $this->pageController = new Controller\IndexController();
-        }
-        return $this->pageController;
+
+        $this->pageController->index();
     }
 
     public function filterString($string)
@@ -50,9 +55,12 @@ class Base
         return filter_var($string, FILTER_SANITIZE_STRING);
     }
 
-    public function setRoute($route)
+    private function setRoute($route)
     {
-        $this->route = $route;
+        if ($route == '') {
+            $route = 'index';
+        }
+        $this->route = ucfirst($route);
     }
 
     public function getRoute()
@@ -67,20 +75,23 @@ class Base
 
     public function render($template, array $data = [])
     {
-        if ($data) {
-            extract($data);
+        $path = require __DIR__ . '/Templates/' . $template . '.php';
+
+        if (file_exists($path)) {
+            if ($data) {
+                extract($data);
+            }
+
+            ob_start();
+
+            include $path;
+            $this->renderFile = ob_get_contents();
+            ob_end_clean();
         }
-        ob_start();
-        require __DIR__ . '/Templates/' . $template . '.php';
-        $this->renderFile = ob_get_clean();
     }
 
-    /**
-     * Run
-     * @return mixed
-     */
-    public function run()
+    protected function prettyDebug($data)
     {
-        echo $this->renderFile;
+        echo '<pre>' . var_export($data, true) . '</pre>';
     }
 }

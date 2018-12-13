@@ -13,34 +13,33 @@ class BaseTest extends TestCase
 {
 
     /** @var \d8devs\socialposter\Base */
-    private static $base;
+    protected $base;
 
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
-        self::$base = new Base();
-    }
-
-    public function testGetTwitter()
-    {
-        self::$base->setRoute('twitter');
-        $this->assertInstanceOf('d8devs\socialposter\Controller\TwitterController', self::$base->get());
-    }
-
-    public function testGetFacebook()
-    {
-        self::$base->setRoute('facebook');
-        $this->assertInstanceOf('d8devs\socialposter\Controller\FacebookController', self::$base->get());
+        $this->base = new Base();
     }
 
     public function testGetIndex()
     {
-        self::$base->setRoute('');
-        $this->assertInstanceOf('d8devs\socialposter\Controller\IndexController', self::$base->get());
+        $this->assertSame('Index', $this->base->getRoute());
     }
 
     public function testFilterString()
     {
-        $filteredString = self::$base->filterString('12-<script type="text/javascript">3*/</script>');
+        $filteredString = $this->base->filterString('12-<script type="text/javascript">3*/</script>');
         $this->assertSame($filteredString, '12-3*/');
+    }
+
+    public function testTestFilesIfExists()
+    {
+        $testFiles = [
+            __DIR__ . '/../files/images/image1.png',
+            __DIR__ . '/../files/images/image2.jpg',
+            __DIR__ . '/../files/videos/video1.jpg',
+        ];
+
+        $this->assertTrue(file_exists($testFiles[0]));
+        $this->assertTrue(file_exists($testFiles[1]));
     }
 }

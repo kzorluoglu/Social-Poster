@@ -1,50 +1,87 @@
 <?php
 namespace d8devs\socialposter\Controller;
 
+use Facebook\Facebook;
 use d8devs\socialposter\Base;
-use d8devs\socialposter\SocialPoster;
-use d8devs\socialposter\Helper\Upload;
+use d8devs\socialposter\Database;
+use d8devs\socialposter\Model\Post;
 
 /**
  * Description of FacebookController
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class FacebookController extends Base
+class FacebookController
 {
+
+    /** @var Database **/
+    private $db;
+
     public function __construct()
     {
-        $this->index();
+        $dbInstance = Database::getInstance();
     }
 
-    public function index()
+    public function send(Post $post)
     {
-        $error_message = "";
-        $reports = "";
+        $facebookInformation = $this->getFacebookInformation($post);
 
-        if ($_POST) {
-            if (empty($_POST['message'])) {
-                $error_message = "Please do not empty the Message field.";
-            }
+        $fb = new Facebook([
+            'app_id' => $facebook->getAppId(),
+            'app_secret' => $facebook->getAppSecret(),
+            'default_graph_version' => $facebook->getDefaultGraphVersion()
+        ]);
 
-            if ($error_message == "") {
-                $poster = new SocialPoster();
+        $fb->setDefaultAccessToken($facebook->getAccessToken());
 
-                if (isset($_FILES['pictures'])) {
-                    $upload = new Upload();
-                    $upload->setFiles($_FILES['pictures']);
-                    $upload->uploadFiles();
-                    $poster->facebook($_POST['message'], $upload->getUploadedFiles());
-                } else {
-                    $poster->facebook($_POST['message']);
-                }
-                $reports = $poster->getReport();
-            }
+        if ($post->getAttachments()) {
+            $this->report[] = $fb->sendRequest('POST', $facebook->getPage() . "/feed", [
+                'message' => $post->getPost(),
+                'attached_media' => $this->imageUpload($post->getAttachments(), $fb, $facebook->getPage())
+            ]);
+        } else {
+            $this->report[] = $fb->sendRequest('POST', $facebook->getPage() . "/feed", [
+                'message' => $post->getPost()
+            ]);
+        }
+    }
+
+    private function getFacebookInformation(Post $post)
+    {
+        /**
+         * @TODO: Get Facebook Api Infos
+         */
+    }
+
+    /**
+     * Upload Images to Facebook
+     *
+     *
+     * @param array $images
+     * @param Facebook $facebook
+     * @param string $page
+     *
+     * @return array media_fbid[]
+     */
+    private function imageUpload($images, $facebook, $page)
+    {
+        $post_images = array();
+        foreach ($images as $image) {
+            $response = $facebook->sendRequest('POST', $page . "/photos", [
+                'source' => $facebook->fileToUpload($image),
+                'published' => 'false'
+            ]);
+            $graphNode = $response->getGraphNode();
+            $post_images[] = $graphNode['id'];
         }
 
-        $this->render('facebook', array(
-            'error_message' => $error_message,
-            'reports' => $reports
-        ));
+        $attachedMedia = array();
+
+        foreach ($post_images as $key => $post_image) {
+            $attachedMedia[$key] = [
+                'media_fbid' => $post_image
+            ];
+        }
+        return $attachedMedia;
     }
 }

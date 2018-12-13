@@ -8,10 +8,16 @@ namespace d8devs\socialposter\Helper;
  */
 class Upload
 {
+
     protected $allowedTypes = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
     protected $files;
     protected $uploadedFiles;
-    protected $uploadDirectory = "/var/www/uploads/";
+    protected $uploadDirectory = __DIR__ . "/../../uploads/";
+
+    public function __construct(array $files)
+    {
+        $this->files = $this->reArray($files);
+    }
 
     public function setFiles(array $files)
     {
@@ -22,7 +28,8 @@ class Upload
     private function reArray($files)
     {
         $newArray = array();
-        for ($i = 0; $i < count($files['name']); $i++) {
+
+        for ($i = 0; $i < count($files["name"]); $i++) {
             $newArray[$i]['name'] = $files['name'][$i];
             $newArray[$i]['type'] = $files['type'][$i];
             $newArray[$i]['tmp_name'] = $files['tmp_name'][$i];
@@ -37,9 +44,11 @@ class Upload
         foreach ($this->files as $file) {
             if ($this->isAllowed($file['type'])) {
                 $filepath = $this->uploadDirectory . basename($file['name']);
-                $upload = move_uploaded_file($file['tmp_name'], $filepath);
-                if ($upload) {
+                try {
+                    move_uploaded_file($file['tmp_name'], $filepath);
                     $this->uploadedFiles[] = $filepath;
+                } catch (\Exception $e) {
+                    die($e->getMessage());
                 }
             }
         }
