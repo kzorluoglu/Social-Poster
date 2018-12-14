@@ -32,7 +32,7 @@ class FacebookController
             try {
                 $this->response = $fb->sendRequest('POST', 'page' . "/feed", [
                     'message' => $post->message,
-                    'attached_media' => $this->imageUpload($post->attachments, $fb, 'page')
+                    'attached_media' => $this->imageUpload(unserialize($post->attachments), $fb, 'page')
                 ]);
             } catch (\Exception $e) {
                 $this->response = $e->getMessage();

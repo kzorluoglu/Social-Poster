@@ -3,7 +3,7 @@ namespace d8devs\socialposter;
 
 use d8devs\socialposter\Controller\IndexController;
 use d8devs\socialposter\Interfaces\Controller;
-use d8devs\socialposter\Database;
+use d8devs\socialposter\Controller\QueueController;
 
 /**
  * Description of Base
@@ -24,28 +24,40 @@ class Base implements Controller
      */
     public function run()
     {
-        $this->pageController = new IndexController();
-        $this->pageController->index();
+        $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if ($page == '' || $page == 'home') {
+            $this->pageController = new IndexController();
+            $this->pageController->index();
+        }
+
+        if ($page == 'queue') {
+            $this->pageController = new QueueController();
+            $this->pageController->index();
+        }
     }
 
     /**
      * @param $template
      * @param array $data
+     * @return bool
      */
-    public function render($template, array $data = [])
+    public function render($template, $data = array())
     {
-        $path = require __DIR__ . '/Templates/' . $template . '.php';
+        $path = __DIR__ . '/Templates/' . $template . '.php';
+
 
         if (file_exists($path)) {
-            if ($data) {
-                extract($data);
-            }
+             extract($data);
 
+            //Starts output buffering
             ob_start();
 
-            include $path;
-            $this->renderFile = ob_get_contents();
-            ob_end_clean();
+             include $path;
+            $buffer = ob_get_contents();
+            @ob_end_clean();
+
+             echo $buffer;
         }
     }
 

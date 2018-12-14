@@ -56,7 +56,30 @@ class Model extends Base
             ':id' => $id
         ]);
 
-        return $query->fetchObject('Post');
+        return $query->fetchObject('d8devs\socialposter\Model\Post');
+    }
+
+
+    public function getAll($where = array())
+    {
+        $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+
+        $query = $this->generateSelectQuery($where);
+
+        $stmt = $this->db->prepare($query);
+
+        try {
+            foreach ($where as $key => &$value) {
+                $stmt->bindParam(':'.$key, $value);
+            }
+
+            $stmt->execute();
+
+            return $stmt->fetchAll(\PDO::FETCH_CLASS, 'd8devs\socialposter\Model\Post');
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
     }
 
     /**
@@ -87,7 +110,7 @@ class Model extends Base
      */
     public function save()
     {
-        $query =  $this->generateSqlQuery();
+        $query =  $this->generateInsertQuery();
 
         $stmt = $this->db->prepare($query);
 
@@ -112,9 +135,11 @@ class Model extends Base
     }
 
     /**
+     * Insert Query
+     *
      * @return string
      */
-    private function generateSqlQuery()
+    private function generateInsertQuery()
     {
         $columns = $this->getFormattedColumns();
 
@@ -127,5 +152,29 @@ class Model extends Base
         $valueString = implode(', ', array_keys($changeArrayKeys));
 
         return "INSERT INTO ".$this->table." ({$columnString}) VALUES ({$valueString})";
+    }
+
+    /**
+     * @param $where string
+     * @return string
+     */
+    private function generateSelectQuery($where = array())
+    {
+
+        $query = "SELECT * FROM ".$this->table;
+        
+        if ($where) {
+            $changeArrayKeys = array();
+            foreach ($where as $key => $value) {
+                $changeArrayKeys[$key." = :".$key." AND"] = $value;
+            }
+
+            $valueString = implode(', ', array_keys($changeArrayKeys));
+            $valueString = rtrim($valueString, ' AND');
+
+            $query .= " WHERE {$valueString}";
+        }
+
+        return $query;
     }
 }

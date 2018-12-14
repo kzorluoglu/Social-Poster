@@ -32,6 +32,9 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="index.php">Home</a>
                     </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="index.php?page=queue">Queue</a>
+                    </li>
                 </ul>
             </div>
         </nav>

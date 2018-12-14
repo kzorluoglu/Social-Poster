@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Send</button>
+        <button type="submit" class="btn btn-primary">Send in the queue</button>
     </form>   
 </div>
 <?php require 'layout/footer.php'; ?>

@@ -16,12 +16,6 @@ use d8devs\socialposter\Helper\Upload;
 class IndexController extends Base
 {
 
-    /**
-     * Sender Class
-     * @var [FacebookController|TwitterController]
-     */
-    private $sender;
-
     public function index()
     {
 
@@ -43,24 +37,15 @@ class IndexController extends Base
             $newPost->for = $post['for'];
             $newPost->target = $post['target'];
             $newPost->message = $post['message'];
-            $newPost->attachments = $files;
+            $newPost->attachments = serialize($files);
             $newPost->created_at = strtotime('now');
+            $newPost->status = "created";
             $newPost->save();
         }
     }
 
     public function send(Post $post)
     {
-
-        if ($post->for == "facebook_page") {
-            $this->sender = new FacebookController();
-        }
-
-        if ($post->for == "twitter_account") {
-            $this->sender = new TwitterController();
-        }
-
-        return $this->sender->send($post);
     }
 
     public function formatPostRequest(array $posts)
