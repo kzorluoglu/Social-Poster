@@ -82,6 +82,32 @@ class Model extends Base
         }
     }
 
+    public function getOne($where = array())
+    {
+        $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+
+        $query = $this->generateSelectOneQuery($where);
+
+        $stmt = $this->db->prepare($query);
+
+        try {
+            foreach ($where as $key => &$value) {
+                $stmt->bindParam(':'.$key, $value);
+            }
+
+            $stmt->execute();
+
+            /**
+             * @TODO: If 0 return give error
+             */
+            return $stmt->fetchObject('d8devs\socialposter\Model\Post');
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+
     /**
      * @param $name
      * @param $value
@@ -112,6 +138,21 @@ class Model extends Base
     {
         $query =  $this->generateInsertQuery();
 
+        $stmt = $this->db->prepare($query);
+
+        try {
+            foreach ($this->getFormattedColumns() as $key => &$value) {
+                $stmt->bindParam(':'.$key, $value);
+            }
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function update()
+    {
+        $query = $this->generateUpdateQuery();
         $stmt = $this->db->prepare($query);
 
         try {
@@ -176,5 +217,52 @@ class Model extends Base
         }
 
         return $query;
+    }
+
+
+    /**
+     * @param $where string
+     * @return string
+     */
+    private function generateSelectOneQuery($where = array())
+    {
+
+        $query = "SELECT * FROM ".$this->table;
+
+        if ($where) {
+            $changeArrayKeys = array();
+            foreach ($where as $key => $value) {
+                $changeArrayKeys[$key." = :".$key." AND"] = $value;
+            }
+
+            $valueString = implode(', ', array_keys($changeArrayKeys));
+            $valueString = rtrim($valueString, ' AND');
+
+            $query .= " WHERE {$valueString} ";
+        }
+
+        $query .= "LIMIT 1";
+        return $query;
+    }
+
+    /**
+     * @return string
+     */
+    private function generateUpdateQuery()
+    {
+
+        $columns = $this->getFormattedColumns();
+
+        $changeArrayKeys = array();
+        foreach ($columns as $key => $value) {
+            if ($key == 'id') {
+                continue;
+            }
+            $changeArrayKeys[$key." = :".$key] = $value;
+        }
+
+        $columnString = implode(', ', array_keys($changeArrayKeys));
+
+        return "UPDATE ".$this->table." SET {$columnString} WHERE id = :id";
     }
 }

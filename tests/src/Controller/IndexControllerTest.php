@@ -3,7 +3,6 @@ namespace d8devs\socialposter\tests\Controller;
 
 use PHPUnit\Framework\TestCase;
 use d8devs\socialposter\Controller\IndexController;
-use d8devs\socialposter\Model\Post;
 
 /**
  * Description of IndexControllerTest
@@ -56,44 +55,9 @@ class IndexControllerTest extends TestCase
     /** @var IndexController */
     private $controller;
 
-    /** @var array Test Uploaded Files  */
-    private $uploadedFiles = array(
-        __DIR__ . '/../../files/images/image1.png',
-        __DIR__ . '/../../files/images/image2.jpg',
-        __DIR__ . '/../../files/videos/video1.jpg',
-    );
-
     protected function setUp()
     {
         $this->controller = new IndexController();
-    }
-
-    public function testTwitterSend()
-    {
-
-        $post = new Post();
-        $post->for = 'twitter_account';
-        $post->target = '1';
-        $post->message = 'Test Twitt with Attachments';
-        $post->attachments = $this->uploadedFiles;
-
-        $sendedPost = $this->controller->send($post);
-
-        $this->assertSame($sendedPost, 'Invalid or expired token.');
-    }
-
-
-    public function testFacebookSend()
-    {
-        $post = new Post();
-        $post->for = 'facebook_page';
-        $post->target = '1';
-        $post->message = 'Test Facebook Post with Attachments';
-        $post->attachments = $this->uploadedFiles;
-
-        $sendedPost = $this->controller->send($post);
-
-        $this->assertSame($sendedPost, 'Invalid OAuth access token.');
     }
 
     public function testformatPostRequest()

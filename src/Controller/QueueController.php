@@ -17,29 +17,61 @@ class QueueController extends Base
 {
     /**
      * Sender Class
-     * @var [FacebookController|TwitterController]
+     * @var FacebookController|TwitterController
      */
     private $sender;
 
     public function index()
     {
         $postModel = new Post();
-        $posts = $postModel->getAll(['status' => 'created']);
+        $post = $postModel->getOne(['status' => 'created']);
 
-        foreach ($posts as $post) {
-            if ($post->for == "facebook_page") {
-                $this->sender = new FacebookController();
-            }
-
-            if ($post->for == "twitter_account") {
-                $this->sender = new TwitterController();
-            }
-
-            $this->sender->send($post);
+        if ($post) {
+            $this->send($post);
+        } else {
+            $finished = "All Posts sended";
         }
 
+
+        $posts = $postModel->getAll(['status' => 'created']);
+
          $this->render('queue', [
-            'posts' => $posts
+            'posts' => $posts,
+             'finished' => $finished
          ]);
+    }
+
+    public function send(Post $post)
+    {
+
+
+        if ($post->for == "facebook_page") {
+            $this->sender = new FacebookController();
+        }
+
+        if ($post->for == "twitter_account") {
+            $this->sender = new TwitterController();
+        }
+
+        if ($post->for == "instagram_account") {
+            /**
+             * @TODO : Create Instagram Controller
+             */
+            $this->sender = new FacebookController();
+        }
+
+
+        $sendResponse = $this->sender->send($post);
+
+        if ($sendResponse) {
+            $post->status = "sended";
+        } else {
+            $post->status = "failed";
+        }
+
+         $post->update();
+
+
+        return $sendResponse;
     }
 }
