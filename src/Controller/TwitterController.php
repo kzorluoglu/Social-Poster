@@ -1,9 +1,9 @@
 <?php
+
 namespace d8devs\socialposter\Controller;
 
 use d8devs\socialposter\Base;
 use d8devs\socialposter\Model\Post;
-use d8devs\socialposter\Helper\Upload;
 use Twitter;
 
 /**
@@ -14,6 +14,11 @@ use Twitter;
 class TwitterController extends Base
 {
 
+    /**
+     * @var string
+     */
+    private $response;
+
     public function send(Post $post)
     {
 
@@ -23,10 +28,21 @@ class TwitterController extends Base
             'getAccessToken',
             'getAccessTokenSecret'
         );
-        if ($post->getAttachments()) {
-            return $twitterAPI->send($post->getPost(), $post->getAttachments());
-        } else {
-            return $twitterAPI->send($post->getPost());
+        if ($post->attachments) {
+            try {
+                $this->response = $twitterAPI->send($post->message, $post->attachments);
+            } catch (\Exception $e) {
+                $this->response = $e->getMessage();
+            }
         }
+        if (!$post->attachments) {
+            try {
+                $this->response = $twitterAPI->send($post->message);
+            } catch (\Exception $e) {
+                $this->response = $e->getMessage();
+            }
+        }
+
+        return $this->response;
     }
 }

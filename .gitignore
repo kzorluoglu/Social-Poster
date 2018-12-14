@@ -1,8 +1,5 @@
-/nbproject
+/.idea/
 /vendor/
-.buildpath
-.project
-.settings/
 uploads/
 src/Database/database.sqlite3
 

@@ -12,29 +12,45 @@ use d8devs\socialposter\Model\Post;
  */
 class FacebookController
 {
+    /**
+     * @var string
+     */
+    private $response;
 
     public function send(Post $post)
     {
-        $facebookInformation = $this->getFacebookInformation($post);
 
         $fb = new Facebook([
-            'app_id' => $facebookInformation->getAppId(),
-            'app_secret' => $facebookInformation->getAppSecret(),
-            'default_graph_version' => $facebookInformation->getDefaultGraphVersion()
+            'app_id' => 'getAppId',
+            'app_secret' => 'app_secret',
+            'default_graph_version' => 'default_graph_version'
         ]);
 
-        $fb->setDefaultAccessToken($facebookInformation->getAccessToken());
+        $fb->setDefaultAccessToken('getAccessToken');
 
-        if ($post->getAttachments()) {
-            $this->report[] = $fb->sendRequest('POST', $facebookInformation->getPage() . "/feed", [
-                'message' => $post->getPost(),
-                'attached_media' => $this->imageUpload($post->getAttachments(), $fb, $facebookInformation->getPage())
-            ]);
-        } else {
-            $this->report[] = $fb->sendRequest('POST', $facebookInformation->getPage() . "/feed", [
-                'message' => $post->getPost()
-            ]);
+        if ($post->attachments) {
+            try {
+                $this->response = $fb->sendRequest('POST', 'page' . "/feed", [
+                    'message' => $post->message,
+                    'attached_media' => $this->imageUpload($post->attachments, $fb, 'page')
+                ]);
+            } catch (\Exception $e) {
+                $this->response = $e->getMessage();
+            }
         }
+
+
+        if (!$post->attachments) {
+            try {
+                $this->response =  $fb->sendRequest('POST', 'page' . "/feed", [
+                    'message' => $post->message
+                ]);
+            } catch (\Exception $e) {
+                $this->response =  $e->getMessage();
+            }
+        }
+
+        return $this->response;
     }
 
     private function getFacebookInformation(Post $post)

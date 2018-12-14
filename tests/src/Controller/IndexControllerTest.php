@@ -68,14 +68,32 @@ class IndexControllerTest extends TestCase
         $this->controller = new IndexController();
     }
 
-    public function testSend()
+    public function testTwitterSend()
     {
-        $post = new Post('twitter_account', '1', 'Test Twitt with Attachments', $this->uploadedFiles);
 
-        $status = $this->controller->send($post);
+        $post = new Post();
+        $post->for = 'twitter_account';
+        $post->target = '1';
+        $post->message = 'Test Twitt with Attachments';
+        $post->attachments = $this->uploadedFiles;
 
-        /** Assert Null because Twitter or Facebook Api must be Setted Before Testing **/
-        $this->assertNull($status);
+        $sendedPost = $this->controller->send($post);
+
+        $this->assertSame($sendedPost, 'Invalid or expired token.');
+    }
+
+
+    public function testFacebookSend()
+    {
+        $post = new Post();
+        $post->for = 'facebook_page';
+        $post->target = '1';
+        $post->message = 'Test Facebook Post with Attachments';
+        $post->attachments = $this->uploadedFiles;
+
+        $sendedPost = $this->controller->send($post);
+
+        $this->assertSame($sendedPost, 'Invalid OAuth access token.');
     }
 
     public function testformatPostRequest()
@@ -85,12 +103,5 @@ class IndexControllerTest extends TestCase
         $this->assertSame($this->fakePOST['facebook_page'][0], $posts[0]['target']);
         $this->assertSame($this->fakePOST['twitter_account'][0], $posts[3]['target']);
         $this->assertSame($this->fakePOST['instagram_account'][1], $posts[4]['target']);
-    }
-
-    public function testUploadAttachments()
-    {
-        /**
-        * @TODO: Do it.
-        */
     }
 }

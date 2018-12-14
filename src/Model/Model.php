@@ -1,0 +1,131 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: koray
+ * Date: 14.12.18
+ * Time: 11:03
+ */
+
+namespace d8devs\socialposter\Model;
+
+use d8devs\socialposter\Base;
+use d8devs\socialposter\Database;
+
+class Model extends Base
+{
+    /**
+     * @var \PDO
+     */
+    protected $db;
+
+    /**
+     * @var string Table
+     */
+    public $table;
+
+    /**
+     * @var array Columuns
+     */
+    public $columns = array();
+
+    /**
+     * @var array Columns Schema
+     * Example: ['columnName' => 'columnValue']
+     */
+    private $formattedColumns = array();
+
+
+    /**
+     * Model constructor.
+     */
+    public function __construct()
+    {
+        $db = Database::getInstance();
+        $this->db = $db->getConnection();
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function findById($id)
+    {
+        $query = $this->db->prepare('SELECT * :table WHERE id = :id');
+        $query->execute([
+            ':table' => $this->table,
+            ':id' => $id
+        ]);
+
+        return $query->fetchObject('Post');
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     */
+    public function __set($name, $value)
+    {
+        if ($value) {
+            $this->columns[$name] = $value;
+            $this->formattedColumns[$name] = $value;
+        }
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        if (key_exists($name, $this->columns)) {
+            return $this->columns[$name];
+        }
+    }
+
+    /**
+     *  Save to DB
+     */
+    public function save()
+    {
+        $query =  $this->generateSqlQuery();
+
+        $stmt = $this->db->prepare($query);
+
+        try {
+            foreach ($this->getFormattedColumns() as $key => &$value) {
+                $stmt->bindParam(':'.$key, $value);
+            }
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * Format $column array
+     *
+     * @return array
+     */
+    public function getFormattedColumns(): array
+    {
+        return $this->formattedColumns;
+    }
+
+    /**
+     * @return string
+     */
+    private function generateSqlQuery()
+    {
+        $columns = $this->getFormattedColumns();
+
+        $changeArrayKeys = array();
+        foreach ($columns as $key => $value) {
+            $changeArrayKeys[":".$key] = $value;
+        }
+
+        $columnString = implode(', ', array_keys($columns));
+        $valueString = implode(', ', array_keys($changeArrayKeys));
+
+        return "INSERT INTO ".$this->table." ({$columnString}) VALUES ({$valueString})";
+    }
+}

@@ -13,20 +13,25 @@ use d8devs\socialposter\Database;
 class Base implements Controller
 {
 
-    /** @var string   */
-    private $route;
-
-
     /** @var mixed * */
     private $renderFile;
 
+    /** @var IndexController */
+    private $pageController;
 
+    /**
+     * Run Index Controller
+     */
     public function run()
     {
         $this->pageController = new IndexController();
         $this->pageController->index();
     }
 
+    /**
+     * @param $template
+     * @param array $data
+     */
     public function render($template, array $data = [])
     {
         $path = require __DIR__ . '/Templates/' . $template . '.php';
@@ -44,8 +49,21 @@ class Base implements Controller
         }
     }
 
+    /**
+     * @param $data
+     */
     protected function prettyDebug($data)
     {
         echo '<pre>' . var_export($data, true) . '</pre>';
+    }
+
+    /**
+     * Return Class Name
+     *
+     * @return string
+     */
+    public function getPageController()
+    {
+        return get_class($this->pageController);
     }
 }

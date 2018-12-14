@@ -4,62 +4,26 @@ namespace d8devs\socialposter\Model;
 /**
  * Description of Post
  *
+ * @property {facebook_page, twitter_account, instagram_account} for
+ * @property int target
+ * @property string message
+ * @property string attachments
+ * @property string status
+ * @property strtotime sended_at
+ * @property strtotime created_at
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class Post
+class Post extends Model
 {
-    /** @var string twitter|facebook|instagram */
-    private $for;
-    
-    /** @var mixed */
-    private $target;
-    
-    /** @var mixed string|html */
-    private $message;
-    
-    /** @var mixed array|null File Paths */
-    private $attachments;
-    
-    /** @var array mixed **/
-    private $report;
-    
-    public function __construct($for, $target, $message, $attachments = null)
-    {
-        $this->for = $for;
-        $this->target = $target;
-        $this->message = $message;
-        $this->attachments = $attachments;
-    }
-    
-    public function getFor()
-    {
-        return $this->for;
-    }
-    
-    public function getTarget()
-    {
-        return $this->target;
-    }
-    
-    public function getMessage()
-    {
-        return $this->message;
-    }
+    public $table = "posts";
 
-    public function getAttachments()
-    {
-        return $this->attachments;
-    }
-
-    public function getReport($key)
-    {
-        if (array_key_exists($key, $this->report)) {
-            return $this->report[$key];
-        }
-    }
-
-    public function setReport($key, $value)
-    {
-        $this->report[$key] = $value;
-    }
+    public $columns = [
+        'for',
+        'target',
+        'message',
+        'attachments',
+        'status',
+        'sended_at',
+        'created_at'
+    ];
 }
