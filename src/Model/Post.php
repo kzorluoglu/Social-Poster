@@ -9,6 +9,7 @@ namespace d8devs\socialposter\Model;
  * @property string message
  * @property string attachments
  * @property string status
+ * @property string report
  * @property strtotime sended_at
  * @property strtotime created_at
  * @author Koray Zorluoglu <koray@d8devs.com>
@@ -23,6 +24,7 @@ class Post extends Model
         'message',
         'attachments',
         'status',
+        'report',
         'sended_at',
         'created_at'
     ];

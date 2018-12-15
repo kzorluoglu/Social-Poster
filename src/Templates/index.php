@@ -30,38 +30,40 @@
 
         <div class="form-group form-check">
             <label for="inputFiles">Accounts</label>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="facebook_page[]" value="1" id="facebookCheck1">
-                <label class="form-check-label" for="facebookCheck1">
-                    Facebook 1
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="facebook_page[]" value="2" id="facebookCheck2">
-                <label class="form-check-label" for="facebookCheck2">
-                    Facebook 2
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="twitter_account[]"  value="1" id="twitterCheck1">
-                       <label class="form-check-label" for="twitterCheck1">
-                    Twitter 1
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox"
-                       name="instagram_account[]" value="1" id="instagramCheck1">
-                <label class="form-check-label" for="instagramCheck1">
-                    Instagram 1
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox"
-                       name="instagram_account[]" value="1" id="instagramCheck2">
-                <label class="form-check-label" for="instagramCheck2">
-                    Instagram 2
-                </label>
-            </div>
+
+            <?php if ($facebook_pages) : ?>
+                <?php foreach ($facebook_pages as $page) : ?>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="facebook_page[]" value="<?php echo $page->id; ?>" id="facebookCheck<?php echo $page->id; ?>">
+                        <label class="form-check-label" for="facebookCheck<?php echo $page->id; ?>">
+                            Facebook 1
+                        </label>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            <?php if ($twitter_accounts) : ?>
+                <?php foreach ($twitter_accounts as $account) : ?>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="twitter_account[]" value="<?php echo $account->id; ?>" id="twitterCheck<?php echo $account->id; ?>">
+                        <label class="form-check-label" for="twitterCheck<?php echo $account->id; ?>">
+                            Facebook 1
+                        </label>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            <?php if ($instagram_accounts) : ?>
+                <?php foreach ($instagram_accounts as $account) : ?>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="instagram_account[]" value="<?php echo $account->id; ?>" id="instagramCheck<?php echo $account->id; ?>">
+                        <label class="form-check-label" for="instagramCheck<?php echo $account->id; ?>">
+                            Facebook 1
+                        </label>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
         </div>
 
         <button type="submit" class="btn btn-primary">Send in the queue</button>

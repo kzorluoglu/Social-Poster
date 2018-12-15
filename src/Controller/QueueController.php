@@ -21,29 +21,33 @@ class QueueController extends Base
      */
     private $sender;
 
+    /**
+     * @var array
+     */
+    private $status;
+
     public function index()
     {
         $postModel = new Post();
         $post = $postModel->getOne(['status' => 'created']);
 
         if ($post) {
-            $this->send($post);
+            $this->status = $this->send($post);
         } else {
-            $finished = "All Posts sended";
+            $this->status['response'] = "All Created Posts sended";
+            $this->status['error'] = null;
         }
-
 
         $posts = $postModel->getAll(['status' => 'created']);
 
          $this->render('queue', [
-            'posts' => $posts,
-             'finished' => $finished
+             'posts' => $posts,
+             'status' => $this->status
          ]);
     }
 
     public function send(Post $post)
     {
-
 
         if ($post->for == "facebook_page") {
             $this->sender = new FacebookController();
@@ -61,17 +65,19 @@ class QueueController extends Base
         }
 
 
-        $sendResponse = $this->sender->send($post);
+        $response = $this->sender->send($post);
 
-        if ($sendResponse) {
+        if ($response['response']) {
             $post->status = "sended";
-        } else {
+            $post->report = serialize($response);
+        }
+        if ($response['error']) {
             $post->status = "failed";
+            $post->report = serialize($response);
         }
 
          $post->update();
 
-
-        return $sendResponse;
+        return $response;
     }
 }

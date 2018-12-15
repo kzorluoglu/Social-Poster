@@ -5,6 +5,7 @@ namespace d8devs\socialposter\Controller;
 use d8devs\socialposter\Base;
 use d8devs\socialposter\Controller\FacebookController;
 use d8devs\socialposter\Controller\TwitterController;
+use d8devs\socialposter\Model\FacebookPage;
 use d8devs\socialposter\Model\Post;
 use d8devs\socialposter\Helper\Upload;
 
@@ -19,6 +20,8 @@ class IndexController extends Base
     public function index()
     {
 
+        $facebookPages = new FacebookPage();
+        $pages = $facebookPages->getAll();
 
         if ($_POST) {
             $formattedPostRequest = $this->formatPostRequest($_POST);
@@ -26,7 +29,9 @@ class IndexController extends Base
             $this->createPosts($formattedPostRequest, $files);
         }
 
-        $this->render('index');
+        $this->render('index', [
+            'facebook_pages' => $pages
+        ]);
     }
 
     private function createPosts($formattedPostRequest, $files)

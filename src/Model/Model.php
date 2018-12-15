@@ -76,7 +76,7 @@ class Model extends Base
 
             $stmt->execute();
 
-            return $stmt->fetchAll(\PDO::FETCH_CLASS, 'd8devs\socialposter\Model\Post');
+            return $stmt->fetchAll(\PDO::FETCH_CLASS, get_class($this));
         } catch (\PDOException $e) {
             echo $e->getMessage();
         }
@@ -101,7 +101,7 @@ class Model extends Base
             /**
              * @TODO: If 0 return give error
              */
-            return $stmt->fetchObject('d8devs\socialposter\Model\Post');
+            return $stmt->fetchObject(get_class($this));
         } catch (\PDOException $e) {
             echo $e->getMessage();
         }

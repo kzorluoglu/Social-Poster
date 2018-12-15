@@ -44,6 +44,7 @@ class Database
             message TEXT,
             attachments TEXT,
             status INTEGER,
+            report TEXT,
             sended_at TEXT,
             created_at TEXT
         )");

@@ -4,6 +4,7 @@ namespace d8devs\socialposter\Controller;
 
 use d8devs\socialposter\Base;
 use d8devs\socialposter\Model\Post;
+use d8devs\socialposter\Model\TwitterAccount;
 use Twitter;
 
 /**
@@ -19,30 +20,42 @@ class TwitterController extends Base
      */
     private $response;
 
+    /**
+     * @var string
+     */
+    private $error;
+
     public function send(Post $post)
     {
+        $twitterAccount = new TwitterAccount();
+        $twitter = $twitterAccount->getOne(['id' => $post->target]);
 
         $twitterAPI = new Twitter(
-            'getConsumerKey',
-            'getConsumerSecret',
-            'getAccessToken',
-            'getAccessTokenSecret'
+            $twitter->consumer_key,
+            $twitter->consumer_secret,
+            $twitter->access_token,
+            $twitter->access_token_secret
         );
-        if ($post->attachments) {
+
+
+        if (unserialize($post->attachments)) {
             try {
                 $this->response = $twitterAPI->send($post->message, $post->attachments);
             } catch (\Exception $e) {
-                $this->response = $e->getMessage();
+                $this->error = $e->getMessage();
             }
         }
-        if (!$post->attachments) {
+        if (!unserialize($post->attachments)) {
             try {
                 $this->response = $twitterAPI->send($post->message);
             } catch (\Exception $e) {
-                $this->response = $e->getMessage();
+                $this->error = $e->getMessage();
             }
         }
 
-        return $this->response;
+        return [
+            'response' => $this->response,
+            'error' => $this->error
+        ];
     }
 }

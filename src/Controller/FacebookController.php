@@ -1,6 +1,7 @@
 <?php
 namespace d8devs\socialposter\Controller;
 
+use d8devs\socialposter\Model\FacebookPage;
 use Facebook\Facebook;
 use d8devs\socialposter\Base;
 use d8devs\socialposter\Model\Post;
@@ -16,59 +17,58 @@ class FacebookController
      * @var string
      */
     private $response;
+    /**
+     * @var string
+     */
+    private $error;
 
     public function send(Post $post)
     {
+        $facebookPage = new FacebookPage();
+        $page = $facebookPage->getOne(['id' => $post->target]);
+
 
         $fb = new Facebook([
-            'app_id' => 'getAppId',
-            'app_secret' => 'app_secret',
-            'default_graph_version' => 'default_graph_version'
+            'app_id' => $page->app_id,
+            'app_secret' => $page->app_secret,
+            'default_graph_version' => $page->default_graph_version
         ]);
 
         $fb->setDefaultAccessToken('getAccessToken');
 
-        if ($post->attachments) {
+        if (unserialize($post->attachments)) {
             try {
-                $this->response = $fb->sendRequest('POST', 'page' . "/feed", [
+                $this->response = $fb->sendRequest('POST', $page->page . "/feed", [
                     'message' => $post->message,
-                    'attached_media' => $this->imageUpload(unserialize($post->attachments), $fb, 'page')
+                    'attached_media' => $this->imageUpload(unserialize($post->attachments), $fb, $page->page)
                 ]);
             } catch (\Exception $e) {
-                $this->response = $e->getMessage();
+                $this->error = $e->getMessage();
             }
         }
 
 
-        if (!$post->attachments) {
+        if (!unserialize($post->attachments)) {
             try {
-                $this->response =  $fb->sendRequest('POST', 'page' . "/feed", [
+                $this->response =  $fb->sendRequest('POST', $page->page . "/feed", [
                     'message' => $post->message
                 ]);
             } catch (\Exception $e) {
-                $this->response =  $e->getMessage();
+                $this->error =  $e->getMessage();
             }
         }
 
-        return $this->response;
-    }
-
-    private function getFacebookInformation(Post $post)
-    {
-        /**
-         * @TODO: Get Facebook Api Infos
-         */
+        return [
+            'response' => $this->response,
+            'error' => $this->error
+            ];
     }
 
     /**
-     * Upload Images to Facebook
-     *
-     *
-     * @param array $images
-     * @param Facebook $facebook
-     * @param string $page
-     *
-     * @return array media_fbid[]
+     * @param $images
+     * @param $facebook
+     * @param $page
+     * @return array
      */
     private function imageUpload($images, $facebook, $page)
     {
