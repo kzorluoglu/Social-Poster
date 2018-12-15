@@ -1,50 +1,93 @@
 <?php
 namespace d8devs\socialposter\Controller;
 
+use d8devs\socialposter\Model\FacebookPage;
+use Facebook\Facebook;
 use d8devs\socialposter\Base;
-use d8devs\socialposter\SocialPoster;
-use d8devs\socialposter\Helper\Upload;
+use d8devs\socialposter\Model\Post;
 
 /**
  * Description of FacebookController
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class FacebookController extends Base
+class FacebookController
 {
-    public function __construct()
+    /**
+     * @var string
+     */
+    private $response;
+    /**
+     * @var string
+     */
+    private $error;
+
+    public function send(Post $post)
     {
-        $this->index();
-    }
 
-    public function index()
-    {
-        $error_message = "";
-        $reports = "";
+        $target = unserialize($post->target);
 
-        if ($_POST) {
-            if (empty($_POST['message'])) {
-                $error_message = "Please do not empty the Message field.";
-            }
+        $fb = new Facebook([
+            'app_id' => $target['app_id'],
+            'app_secret' => $target['app_secret'],
+            'default_graph_version' => $target['default_graph_version']
+        ]);
 
-            if ($error_message == "") {
-                $poster = new SocialPoster();
+        $fb->setDefaultAccessToken($target['access_token']);
 
-                if (isset($_FILES['pictures'])) {
-                    $upload = new Upload();
-                    $upload->setFiles($_FILES['pictures']);
-                    $upload->uploadFiles();
-                    $poster->facebook($_POST['message'], $upload->getUploadedFiles());
-                } else {
-                    $poster->facebook($_POST['message']);
-                }
-                $reports = $poster->getReport();
+        if (unserialize($post->attachments)) {
+            try {
+                $this->response = $fb->sendRequest('POST', $target['page'] . "/feed", [
+                    'message' => $post->message,
+                    'attached_media' => $this->imageUpload(unserialize($post->attachments), $fb, $target['page'])
+                ]);
+            } catch (\Exception $e) {
+                $this->error = $e->getMessage();
             }
         }
 
-        $this->render('facebook', array(
-            'error_message' => $error_message,
-            'reports' => $reports
-        ));
+
+        if (!unserialize($post->attachments)) {
+            try {
+                $this->response =  $fb->sendRequest('POST', $target['page'] . "/feed", [
+                    'message' => $post->message
+                ]);
+            } catch (\Exception $e) {
+                $this->error =  $e->getMessage();
+            }
+        }
+
+        return [
+            'response' => $this->response,
+            'error' => $this->error
+            ];
+    }
+
+    /**
+     * @param $images
+     * @param $facebook
+     * @param $page
+     * @return array
+     */
+    private function imageUpload($images, $facebook, $page)
+    {
+        $post_images = array();
+        foreach ($images as $image) {
+            $response = $facebook->sendRequest('POST', $page . "/photos", [
+                'source' => $facebook->fileToUpload($image),
+                'published' => 'false'
+            ]);
+            $graphNode = $response->getGraphNode();
+            $post_images[] = $graphNode['id'];
+        }
+
+        $attachedMedia = array();
+
+        foreach ($post_images as $key => $post_image) {
+            $attachedMedia[$key] = [
+                'media_fbid' => $post_image
+            ];
+        }
+        return $attachedMedia;
     }
 }

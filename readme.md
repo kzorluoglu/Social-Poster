@@ -1,4 +1,8 @@
-# Social Poster [![Build Status](https://travis-ci.com/kzorluoglu/socialposter.svg?branch=master)](https://travis-ci.com/kzorluoglu/socialposter)
+# Social Poster 
+Master [![Build Status](https://travis-ci.com/kzorluoglu/Social-Poster.svg?branch=master)](https://travis-ci.com/kzorluoglu/socialposter)
+
+v2-develop [![Build Status](https://travis-ci.com/kzorluoglu/Social-Poster.svg?branch=v2-develop)](https://travis-ci.com/kzorluoglu/Social-Poster)
+
 
 Social Poster is a simple Post with Images/Videos/File sender for Multi Accounts/Pages (Facebook Pages and Twitter Accounts)
 
@@ -6,8 +10,27 @@ Social Poster is a simple Post with Images/Videos/File sender for Multi Accounts
   - Text with Image-\s Posting for Multiple Pages and Accounts
 
 # Screenshots
-![Screenshot](https://i.ibb.co/YcGvnt9/Screens.png)
+Home
 
+![Home](https://i.ibb.co/pfMDSWS/Home.png)
+
+Admin
+
+![Home](https://i.ibb.co/XW1hxSr/Admin.png)
+
+Queue
+
+![Queue](https://i.ibb.co/fF3JJFV/Queue.png)
+
+Success
+
+![Success](https://i.ibb.co/0n0m95q/Success.png)
+
+Error
+
+![Error](https://i.ibb.co/HzHGMyC/Error.png)
+
+ 
 # New Features?
 
   - Please create new Issue.
@@ -40,46 +63,27 @@ class Upload {
     ...
     protected $uploadDirectory = "/var/www/uploads/";
 ```
-2. Write Your Account Informations
-```
-src\Account\FacebookPage.php
-src\Account\Twitter.php
-```
-
-for Example for Facebook..
-```
-class FacebookPage {
-......
-    public function __construct() {
-        // 1. Page and App
-        $this->addAccount(new Facebook(
-                'yourPageId', 'yourAppId', 'yourAppSecretCode', 'yourGraphVersion', 'yourLongAccessToken'
-                )
-        );
-         // 2. Page and App
-        $this->addAccount(new Facebook(
-                'yourPageId', 'yourAppId', 'yourAppSecretCode', 'yourGraphVersion', 'yourLongAccessToken'
-                )
-        );
-        // and more accounts.....
-    }
-```
+2. Open Admin Page and add your Socail Media Accounts
+    
 ### Integration
 
 Facebook
  - Create Facebook Developer Account
  - Create Simple App
-    -  You not need Facebook Products other anything under Your **App Settings**, I have only **Contact E-mail** filled
+    -  Fill **App Domains** and **Privacy Policy URL**  under **Settings -> Basic**
     -  Call **https://developers.facebook.com/tools/explorer/**
     -  Select **Your App** under **Application** Select
-    -  Select **Page Access Token** under **Get Token** Button
+    -  Select **Get User Access Token** under **Get Token** Button
+        - Select **manage_pages**, **pages_messaging**, **pages_show_list** Permissions from opened Pop-up
+        - Click then Get Access Token
+    -  Select Your Page from **Page Access Token** under **Get Token** Button
     -  Click **i** icon after Access Token Creating
-    -  Click Open in **Access Token Tool** from **opened Internal Popup**
+    -  Click Open in **Access Token Tool** from **opened Pop-up**
     -  Click **Generate Long Lived Token**
 
 Twitter
  - Create Twitter Developer Account
- - Create Simple App
+ - Create App
     - Click App Details 
     -  This Keys will be located under **Keys and tokens** Menu
 

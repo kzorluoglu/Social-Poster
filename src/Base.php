@@ -1,86 +1,95 @@
 <?php
 namespace d8devs\socialposter;
 
+use d8devs\socialposter\Controller\AdminController;
+use d8devs\socialposter\Controller\IndexController;
+use d8devs\socialposter\Interfaces\Controller;
+use d8devs\socialposter\Controller\QueueController;
+
 /**
  * Description of Base
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class Base
+class Base extends Database
 {
 
-    /** @var type string   */
-    private $route;
+    /**
+     * @var string
+     */
+    public $env;
 
-    /** @var type FacebookController|IndexController|TwitterController|   */
+    /** @var IndexController */
     private $pageController;
 
-    /** @var renderFile Html * */
-    private $renderFile;
-
-    public function __construct()
-    {
-        if (isset($_GET['page'])) {
-            $route = $this->filterString($_GET['page']);
-        }
-        if (empty($_GET['page'])) {
-            $route = '';
-        }
-
-        $this->setRoute($route);
-        $this->get();
-    }
-
-    public function get()
-    {
-        if ($this->route == "twitter") {
-            $this->pageController = new Controller\TwitterController();
-        }
-        if ($this->route == "facebook") {
-            $this->pageController = new Controller\FacebookController();
-        }
-        if ($this->route == '') {
-            $this->pageController = new Controller\IndexController();
-        }
-        return $this->pageController;
-    }
-
-    public function filterString($string)
-    {
-        return filter_var($string, FILTER_SANITIZE_STRING);
-    }
-
-    public function setRoute($route)
-    {
-        $this->route = $route;
-    }
-
-    public function getRoute()
-    {
-        return $this->route;
-    }
-
-    public function __toString()
-    {
-        return $this->pageController;
-    }
-
-    public function render($template, array $data = [])
-    {
-        if ($data) {
-            extract($data);
-        }
-        ob_start();
-        require __DIR__ . '/Templates/' . $template . '.php';
-        $this->renderFile = ob_get_clean();
-    }
+    /**
+     * @var \PDO
+     */
+    protected $db;
 
     /**
-     * Run
-     * @return mixed
+     * Run Index Controller
      */
     public function run()
     {
-        echo $this->renderFile;
+        $db = parent::getInstance();
+        $this->db = $db->getConnection();
+
+        $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if ($page == '' || $page == 'home') {
+            $this->pageController = new IndexController();
+            $this->pageController->index();
+        }
+
+        if ($page == 'queue') {
+            $this->pageController = new QueueController();
+            $this->pageController->index();
+        }
+
+        if ($page == 'run') {
+            $this->pageController = new QueueController();
+            $this->pageController->run();
+        }
+
+        if ($page == 'admin') {
+            $this->pageController = new AdminController();
+            $this->pageController->index();
+        }
+    }
+
+    /**
+     * @param $template
+     * @param array $data
+     * @return bool
+     */
+    public function render($template, $data = array())
+    {
+        $path = __DIR__ . '/Templates/' . $template . '.php';
+
+
+        if (file_exists($path)) {
+             extract($data);
+
+            //Starts output buffering
+            ob_start();
+
+             include $path;
+            $buffer = ob_get_contents();
+            @ob_end_clean();
+
+             echo $buffer;
+        }
+    }
+
+
+    /**
+     * Return Class Name
+     *
+     * @return string
+     */
+    public function getPageController()
+    {
+        return get_class($this->pageController);
     }
 }

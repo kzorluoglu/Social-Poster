@@ -1,9 +1,11 @@
 <?php
+
 namespace d8devs\socialposter\Controller;
 
 use d8devs\socialposter\Base;
-use d8devs\socialposter\SocialPoster;
-use d8devs\socialposter\Helper\Upload;
+use d8devs\socialposter\Model\Post;
+use d8devs\socialposter\Model\TwitterAccount;
+use Twitter;
 
 /**
  * Description of TwitterController
@@ -12,39 +14,48 @@ use d8devs\socialposter\Helper\Upload;
  */
 class TwitterController extends Base
 {
-    public function __construct()
-    {
-        $this->index();
-    }
 
-    public function index()
-    {
-        $error_message = "";
-        $reports = "";
+    /**
+     * @var string
+     */
+    private $response;
 
-        if ($_POST) {
-            if (empty($_POST['message'])) {
-                $error_message = "Please do not empty the Message field.";
+    /**
+     * @var string
+     */
+    private $error;
+
+    public function send(Post $post)
+    {
+        $target = unserialize($post->target);
+
+
+        $twitterAPI = new Twitter(
+            $target['consumer_key'],
+            $target['consumer_secret'],
+            $target['access_token'],
+            $target['access_token_secret']
+        );
+
+
+        if (unserialize($post->attachments)) {
+            try {
+                $this->response = $twitterAPI->send($post->message, $post->attachments);
+            } catch (\Exception $e) {
+                $this->error = $e->getMessage();
             }
-
-            if ($error_message == "") {
-                $poster = new SocialPoster();
-
-                if (isset($_FILES['pictures'])) {
-                    $upload = new Upload();
-                    $upload->setFiles($_FILES['pictures']);
-                    $upload->uploadFiles();
-                    $poster->twitter($_POST['message'], $upload->getUploadedFiles());
-                } else {
-                    $poster->twitter($_POST['message']);
-                }
-                $reports = $poster->getReport();
+        }
+        if (!unserialize($post->attachments)) {
+            try {
+                $this->response = $twitterAPI->send($post->message);
+            } catch (\Exception $e) {
+                $this->error = $e->getMessage();
             }
         }
 
-        $this->render('twitter', array(
-            'error_message' => $error_message,
-            'reports' => $reports
-        ));
+        return [
+            'response' => $this->response,
+            'error' => $this->error
+        ];
     }
 }

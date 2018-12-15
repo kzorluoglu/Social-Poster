@@ -1,2 +1,5 @@
-/nbproject
+/.idea/
 /vendor/
+uploads/
+src/Database/database.sqlite3
+
