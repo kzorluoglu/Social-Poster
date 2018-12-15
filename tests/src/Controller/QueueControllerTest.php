@@ -34,7 +34,7 @@ class QueueControllerTest extends TestCase
 
         $sendedPost = $this->controller->send($post);
 
-        $this->assertSame($sendedPost, 'Invalid or expired token.');
+        $this->assertSame($sendedPost, ['response' => null, 'error' => 'Invalid or expired token.']);
     }
 
 
@@ -46,7 +46,6 @@ class QueueControllerTest extends TestCase
         $post->message = 'Test Facebook Post with Attachments';
 
         $sendedPost = $this->controller->send($post);
-
-        $this->assertSame($sendedPost, 'Invalid OAuth access token.');
+        $this->assertSame($sendedPost, ['response' => null, 'error' => 'Invalid OAuth access token.']);
     }
 }

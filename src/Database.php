@@ -70,9 +70,15 @@ class Database
             created_at TEXT
         )");
 
+
+        $this->connection->exec("CREATE TABLE IF NOT EXISTS instagram_accounts (
+            id INTEGER PRIMARY KEY,
+            description TEXT,
+            created_at TEXT
+        )");
     /**
      *
-     * @TODO: Instagram Table Schema will be here.
+     * @TODO: InstagramAccount Table Schema will be here.
      */
     }
 

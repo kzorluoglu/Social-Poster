@@ -29,14 +29,16 @@
         </div>
 
         <div class="form-group form-check">
-            <label for="inputFiles">Accounts</label>
+            <label for="inputFiles">Sending Accounts</label>
 
             <?php if ($facebook_pages) : ?>
-                <?php foreach ($facebook_pages as $page) : ?>
+                <?php foreach ($facebook_pages as $account) : ?>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="facebook_page[]" value="<?php echo $page->id; ?>" id="facebookCheck<?php echo $page->id; ?>">
-                        <label class="form-check-label" for="facebookCheck<?php echo $page->id; ?>">
-                            Facebook 1
+                        <input class="form-check-input" type="checkbox"
+                               name="facebook_page[]" value="<?php echo $account->id; ?>"
+                               id="facebookCheck<?php echo $account->id; ?>">
+                        <label class="form-check-label" for="facebookCheck<?php echo $account->id; ?>">
+                            <?php echo $account->description; ?> | Facebook
                         </label>
                     </div>
                 <?php endforeach; ?>
@@ -45,9 +47,11 @@
             <?php if ($twitter_accounts) : ?>
                 <?php foreach ($twitter_accounts as $account) : ?>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="twitter_account[]" value="<?php echo $account->id; ?>" id="twitterCheck<?php echo $account->id; ?>">
+                        <input class="form-check-input" type="checkbox"
+                               name="twitter_account[]" value="<?php echo $account->id; ?>"
+                               id="twitterCheck<?php echo $account->id; ?>">
                         <label class="form-check-label" for="twitterCheck<?php echo $account->id; ?>">
-                            Facebook 1
+                            <?php echo $account->description; ?> | Twitter
                         </label>
                     </div>
                 <?php endforeach; ?>
@@ -56,9 +60,11 @@
             <?php if ($instagram_accounts) : ?>
                 <?php foreach ($instagram_accounts as $account) : ?>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="instagram_account[]" value="<?php echo $account->id; ?>" id="instagramCheck<?php echo $account->id; ?>">
+                        <input class="form-check-input" type="checkbox"
+                               name="instagram_account[]" value="<?php echo $account->id; ?>"
+                               id="instagramCheck<?php echo $account->id; ?>">
                         <label class="form-check-label" for="instagramCheck<?php echo $account->id; ?>">
-                            Facebook 1
+                            <?php echo $account->description; ?> | Instagram
                         </label>
                     </div>
                 <?php endforeach; ?>

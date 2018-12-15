@@ -35,6 +35,11 @@ class Base implements Controller
             $this->pageController = new QueueController();
             $this->pageController->index();
         }
+
+        if ($page == 'run') {
+            $this->pageController = new QueueController();
+            $this->pageController->run();
+        }
     }
 
     /**

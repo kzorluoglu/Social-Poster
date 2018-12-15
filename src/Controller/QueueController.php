@@ -26,9 +26,22 @@ class QueueController extends Base
      */
     private $status;
 
+
     public function index()
     {
         $postModel = new Post();
+
+        $posts = $postModel->getAll(['status' => 'created']);
+
+        $this->render('queue/index', [
+            'posts' => $posts
+        ]);
+    }
+
+    public function run()
+    {
+        $postModel = new Post();
+        $posts = $postModel->getAll(['status' => 'created']);
         $post = $postModel->getOne(['status' => 'created']);
 
         if ($post) {
@@ -37,13 +50,11 @@ class QueueController extends Base
             $this->status['response'] = "All Created Posts sended";
             $this->status['error'] = null;
         }
-
-        $posts = $postModel->getAll(['status' => 'created']);
-
-         $this->render('queue', [
-             'posts' => $posts,
-             'status' => $this->status
-         ]);
+        $this->render('queue/run', [
+            'posts' => $posts,
+            'status' => $this->status,
+            'start' => $this->start
+        ]);
     }
 
     public function send(Post $post)
@@ -59,7 +70,7 @@ class QueueController extends Base
 
         if ($post->for == "instagram_account") {
             /**
-             * @TODO : Create Instagram Controller
+             * @TODO : Create InstagramAccount Controller
              */
             $this->sender = new FacebookController();
         }
@@ -76,7 +87,7 @@ class QueueController extends Base
             $post->report = serialize($response);
         }
 
-         $post->update();
+        $post->update();
 
         return $response;
     }
