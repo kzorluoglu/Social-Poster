@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteCond %{REQUEST_URI} (.*).sqlite3 [NC]
+RewriteRule ^(.*)$ 404.html [R=404,L]
