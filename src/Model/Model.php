@@ -128,8 +128,6 @@ class Model extends Base
     {
         if (key_exists($name, $this->columns)) {
             return $this->columns[$name];
-        } else {
-            return null;
         }
     }
 

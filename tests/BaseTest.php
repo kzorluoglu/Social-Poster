@@ -1,15 +1,14 @@
 <?php
-namespace d8devs\socialposter;
+namespace d8devs\socialposter\tests;
 
-use PHPUnit\Framework\TestCase;
-use d8devs\socialposter\Base;
+define('CURRENT_ENV', 'development');
 
 /**
  * Description of BaseTest
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class BaseTest extends TestCase
+class BaseTest
 {
 
     /** @var \d8devs\socialposter\Base */
@@ -17,7 +16,7 @@ class BaseTest extends TestCase
 
     protected function setUp()
     {
-        $this->base = new Base();
+         $this->base = new Base();
     }
 
     public function testRun()

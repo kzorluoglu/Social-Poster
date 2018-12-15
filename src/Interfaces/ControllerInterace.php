@@ -6,7 +6,7 @@ namespace d8devs\socialposter\Interfaces;
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-interface Controller
+interface ControllerInterace
 {
     public function render($template);
 }

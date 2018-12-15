@@ -27,14 +27,14 @@ class TwitterController extends Base
 
     public function send(Post $post)
     {
-        $twitterAccount = new TwitterAccount();
-        $twitter = $twitterAccount->getOne(['id' => $post->target]);
+        $target = unserialize($post->target);
+
 
         $twitterAPI = new Twitter(
-            $twitter->consumer_key,
-            $twitter->consumer_secret,
-            $twitter->access_token,
-            $twitter->access_token_secret
+            $target['consumer_key'],
+            $target['consumer_secret'],
+            $target['access_token'],
+            $target['access_token_secret']
         );
 
 

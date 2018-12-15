@@ -38,7 +38,8 @@
                         <?php echo $post->for; ?>
                     </td>
                     <td>
-                        <?php echo $post->target; ?>
+                        <?php $target = unserialize($post->target);
+                        echo $target['description']; ?>
                     </td>
                     <td>
                         <?php echo $post->message; ?>

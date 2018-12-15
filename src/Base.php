@@ -10,20 +10,30 @@ use d8devs\socialposter\Controller\QueueController;
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class Base implements Controller
+class Base extends Database
 {
 
-    /** @var mixed * */
-    private $renderFile;
+    /**
+     * @var string
+     */
+    public $env;
 
     /** @var IndexController */
     private $pageController;
+
+    /**
+     * @var \PDO
+     */
+    protected $db;
 
     /**
      * Run Index Controller
      */
     public function run()
     {
+        $db = parent::getInstance();
+        $this->db = $db->getConnection();
+
         $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($page == '' || $page == 'home') {

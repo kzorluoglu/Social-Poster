@@ -57,6 +57,7 @@ class IndexControllerTest extends TestCase
 
     protected function setUp()
     {
+
         $this->controller = new IndexController();
     }
 

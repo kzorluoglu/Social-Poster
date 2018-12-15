@@ -23,6 +23,11 @@
             "d8devs\\socialposter\\" : "src/" 
         }
     },
+    "autoload-dev" : {
+        "psr-4" : {
+            "d8devs\\socialposter\\ŧests\\" : "tests/"
+        }
+    },
     "scripts" : {
         "tests" : [
             "phpunit",

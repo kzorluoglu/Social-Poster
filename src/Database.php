@@ -24,16 +24,6 @@ class Database
         return self::$instance;
     }
 
-    private function __construct()
-    {
-        try {
-            $this->connection = new PDO('sqlite:' . __DIR__ . '/Database/database.sqlite3');
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->createTables();
-        } catch (\Exception $e) {
-            die($e->getMessage());
-        }
-    }
 
     private function createTables()
     {
@@ -88,6 +78,23 @@ class Database
      */
     public function getConnection()
     {
+
+        try {
+            if (CURRENT_ENV == 'test') {
+                $this->connection = new PDO('sqlite::memory:');
+            }
+            if (CURRENT_ENV == 'development') {
+                $this->connection = new PDO('sqlite:' . __DIR__ . '/Database/database.sqlite3');
+            }
+            if (CURRENT_ENV == 'production') {
+                $this->connection = new PDO('sqlite:' . __DIR__ . '/Database/database.sqlite3');
+            }
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->createTables();
+        } catch (\Exception $e) {
+            die($e->getMessage());
+        }
+
         return $this->connection;
     }
 }

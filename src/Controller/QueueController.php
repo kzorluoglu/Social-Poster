@@ -8,12 +8,12 @@
 
 namespace d8devs\socialposter\Controller;
 
-use d8devs\socialposter\Base;
+use d8devs\socialposter\Controller\Controller;
 use d8devs\socialposter\Model\Post;
 use d8devs\socialposter\Controller\FacebookController;
 use d8devs\socialposter\Controller\TwitterController;
 
-class QueueController extends Base
+class QueueController extends Controller
 {
     /**
      * Sender Class
@@ -74,7 +74,6 @@ class QueueController extends Base
              */
             $this->sender = new FacebookController();
         }
-
 
         $response = $this->sender->send($post);
 

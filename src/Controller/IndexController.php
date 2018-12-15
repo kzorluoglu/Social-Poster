@@ -2,7 +2,6 @@
 
 namespace d8devs\socialposter\Controller;
 
-use d8devs\socialposter\Base;
 use d8devs\socialposter\Model\FacebookPage;
 use d8devs\socialposter\Model\InstagramAccount;
 use d8devs\socialposter\Model\Post;
@@ -14,12 +13,11 @@ use d8devs\socialposter\Model\TwitterAccount;
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class IndexController extends Base
+class IndexController extends Controller
 {
 
     public function index()
     {
-
         $facebookPage = new FacebookPage();
         $pages = $facebookPage->getAll();
 
@@ -48,7 +46,25 @@ class IndexController extends Base
         foreach ($formattedPostRequest as $post) {
             $newPost = new Post();
             $newPost->for = $post['for'];
-            $newPost->target = $post['target'];
+
+            $target = "";
+
+            if ($post['for'] == 'facebook_page') {
+                $getTarget = new FacebookPage();
+                $target = $getTarget->getOne(['id' => $post['target']]);
+            }
+
+            if ($post['for'] == 'twitter_account') {
+                $getTarget = new TwitterAccount();
+                $target = $getTarget->getOne(['id' => $post['target']]);
+            }
+
+            if ($post['for'] == 'instagram_account') {
+                $getTarget = new InstagramAccount();
+                $target = $getTarget->getOne(['id' => $post['target']]);
+            }
+
+            $newPost->target = serialize($target->columns);
             $newPost->message = $post['message'];
             $newPost->attachments = serialize($files);
             $newPost->created_at = strtotime('now');
@@ -57,9 +73,6 @@ class IndexController extends Base
         }
     }
 
-    public function send(Post $post)
-    {
-    }
 
     public function formatPostRequest(array $posts)
     {

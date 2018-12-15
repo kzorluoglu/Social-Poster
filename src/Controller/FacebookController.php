@@ -24,23 +24,22 @@ class FacebookController
 
     public function send(Post $post)
     {
-        $facebookPage = new FacebookPage();
-        $page = $facebookPage->getOne(['id' => $post->target]);
 
+        $target = unserialize($post->target);
 
         $fb = new Facebook([
-            'app_id' => $page->app_id,
-            'app_secret' => $page->app_secret,
-            'default_graph_version' => $page->default_graph_version
+            'app_id' => $target['app_id'],
+            'app_secret' => $target['app_secret'],
+            'default_graph_version' => $target['default_graph_version']
         ]);
 
-        $fb->setDefaultAccessToken('getAccessToken');
+        $fb->setDefaultAccessToken($target['access_token']);
 
         if (unserialize($post->attachments)) {
             try {
-                $this->response = $fb->sendRequest('POST', $page->page . "/feed", [
+                $this->response = $fb->sendRequest('POST', $target['page'] . "/feed", [
                     'message' => $post->message,
-                    'attached_media' => $this->imageUpload(unserialize($post->attachments), $fb, $page->page)
+                    'attached_media' => $this->imageUpload(unserialize($post->attachments), $fb, $target['page'])
                 ]);
             } catch (\Exception $e) {
                 $this->error = $e->getMessage();
@@ -50,7 +49,7 @@ class FacebookController
 
         if (!unserialize($post->attachments)) {
             try {
-                $this->response =  $fb->sendRequest('POST', $page->page . "/feed", [
+                $this->response =  $fb->sendRequest('POST', $target['page'] . "/feed", [
                     'message' => $post->message
                 ]);
             } catch (\Exception $e) {
