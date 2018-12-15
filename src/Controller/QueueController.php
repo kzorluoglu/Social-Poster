@@ -52,8 +52,7 @@ class QueueController extends Controller
         }
         $this->render('queue/run', [
             'posts' => $posts,
-            'status' => $this->status,
-            'start' => $this->start
+            'status' => $this->status
         ]);
     }
 
@@ -69,10 +68,7 @@ class QueueController extends Controller
         }
 
         if ($post->for == "instagram_account") {
-            /**
-             * @TODO : Create InstagramAccount Controller
-             */
-            $this->sender = new FacebookController();
+            $this->sender = new InstagramController();
         }
 
         $response = $this->sender->send($post);

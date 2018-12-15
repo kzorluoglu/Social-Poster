@@ -14,6 +14,8 @@ class InstagramAccount extends Model
 
     public $columns = [
         'description',
+        'username',
+        'password',
         'created_at'
     ];
 }

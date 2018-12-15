@@ -64,12 +64,10 @@ class Database
         $this->connection->exec("CREATE TABLE IF NOT EXISTS instagram_accounts (
             id INTEGER PRIMARY KEY,
             description TEXT,
+            username TEXT,
+            password TEXT,
             created_at TEXT
         )");
-    /**
-     *
-     * @TODO: InstagramAccount Table Schema will be here.
-     */
     }
 
     /**

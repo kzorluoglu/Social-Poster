@@ -1,6 +1,7 @@
 <?php
 namespace d8devs\socialposter;
 
+use d8devs\socialposter\Controller\AdminController;
 use d8devs\socialposter\Controller\IndexController;
 use d8devs\socialposter\Interfaces\Controller;
 use d8devs\socialposter\Controller\QueueController;
@@ -49,6 +50,11 @@ class Base extends Database
         if ($page == 'run') {
             $this->pageController = new QueueController();
             $this->pageController->run();
+        }
+
+        if ($page == 'admin') {
+            $this->pageController = new AdminController();
+            $this->pageController->index();
         }
     }
 

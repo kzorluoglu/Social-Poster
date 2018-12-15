@@ -5,7 +5,7 @@ namespace d8devs\socialposter\Model;
  * Description of Post
  *
  * @property facebook_page|witter_account|instagram_account for
- * @property int target
+ * @property string target
  * @property string message
  * @property string attachments
  * @property string status
