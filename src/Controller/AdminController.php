@@ -27,20 +27,25 @@ class AdminController extends Controller
         $instagramAccount = new InstagramAccount();
         $instagramAccounts = $instagramAccount->getAll();
 
-        if($_POST['facebook_page']){
+        if ($_POST['facebook_page']) {
             /**
              * @TODO: Facebook Save or Update
              */
+            return true;
         }
-        if($_POST['twitter_account']){
+
+        if ($_POST['twitter_account']) {
             /**
              * @TODO: Twitter Save or Update
              */
+            return true;
         }
-        if($_POST['instagram_account']){
+
+        if ($_POST['instagram_account']) {
             /**
              * @TODO: Instagram Save or Update
              */
+            return true;
         }
 
         $this->render('admin/index', [
@@ -49,5 +54,4 @@ class AdminController extends Controller
             'instagram_accounts' => $instagramAccounts
         ]);
     }
-
 }
