@@ -11,8 +11,8 @@
         </thead>
         <tbody>
 
-        <?php if ($facebook_pages): ?>
-            <?php foreach ($facebook_pages as $account): ?>
+        <?php if ($facebook_pages) : ?>
+            <?php foreach ($facebook_pages as $account) : ?>
                 <form method="post">
                     <tr>
                         <td>
@@ -66,8 +66,8 @@
             <?php endforeach; ?>
         <?php endif; ?>
 
-        <?php if ($twitter_accounts): ?>
-            <?php foreach ($twitter_accounts as $account): ?>
+        <?php if ($twitter_accounts) : ?>
+            <?php foreach ($twitter_accounts as $account) : ?>
                 <form method="post">
                     <tr>
 
@@ -116,8 +116,8 @@
             <?php endforeach; ?>
         <?php endif; ?>
 
-        <?php if ($instagram_accounts): ?>
-            <?php foreach ($instagram_accounts as $account): ?>
+        <?php if ($instagram_accounts) : ?>
+            <?php foreach ($instagram_accounts as $account) : ?>
                 <form method="post">
                     <tr>
                         <td>

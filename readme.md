@@ -14,6 +14,10 @@ Home
 
 ![Home](https://i.ibb.co/pfMDSWS/Home.png)
 
+Admin
+
+![Home](https://i.ibb.co/XW1hxSr/Admin.png)
+
 Queue
 
 ![Queue](https://i.ibb.co/fF3JJFV/Queue.png)
@@ -59,11 +63,8 @@ class Upload {
     ...
     protected $uploadDirectory = "/var/www/uploads/";
 ```
-2. Write Your Account Informations
-- Admin Page - Coming Soon
-```
-    If you DB Browser for SQLite have, you can under database tables(facebook_pages, twitter_accounts) with hand adding social accounts
-```
+2. Open Admin Page and add your Socail Media Accounts
+    
 ### Integration
 
 Facebook
@@ -89,7 +90,6 @@ Twitter
 ### Todos
 
  - Write Tests
- - Admin Page
 
 ### Tests & Coding standard
 

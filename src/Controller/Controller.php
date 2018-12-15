@@ -25,7 +25,8 @@ class Controller extends Base implements ControllerInterace
     /**
      * @param $url string
      */
-    protected function redirect($url){
+    protected function redirect($url)
+    {
         header("Location: ".$url);
     }
 }

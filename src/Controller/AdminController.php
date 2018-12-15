@@ -29,7 +29,6 @@ class AdminController extends Controller
 
 
         if (isset($_POST['facebook_page|insert'])) {
-
             $account = new FacebookPage();
             $account->description = $_POST['description'];
             $account->page = $_POST['page'];
@@ -42,7 +41,6 @@ class AdminController extends Controller
         }
 
         if (isset($_POST['facebook_page|update'])) {
-
             $find = new FacebookPage();
             $account = $find->getOne(['id' => $_POST['id']]);
             $account->description = $_POST['description'];
@@ -57,12 +55,10 @@ class AdminController extends Controller
 
 
         if (isset($_POST['facebook_page|delete'])) {
-
             $find = new FacebookPage();
             $account = $find->getOne(['id' => $_POST['id']]);
             $account->remove();
             $this->redirect('index.php?page=admin');
-
         }
         if (isset($_POST['twitter_account|insert'])) {
             $account = new TwitterAccount();
@@ -88,12 +84,10 @@ class AdminController extends Controller
         }
 
         if (isset($_POST['twitter_account|delete'])) {
-
             $find = new TwitterAccount();
             $account = $find->getOne(['id' => $_POST['id']]);
             $account->remove();
             $this->redirect('index.php?page=admin');
-
         }
 
         if (isset($_POST['instagram_account|insert'])) {
@@ -116,12 +110,10 @@ class AdminController extends Controller
         }
 
         if (isset($_POST['instagram_account|delete'])) {
-
             $find = new InstagramAccount();
             $account = $find->getOne(['id' => $_POST['id']]);
             $account->remove();
             $this->redirect('index.php?page=admin');
-
         }
 
 
