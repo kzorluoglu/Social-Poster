@@ -14,4 +14,18 @@ use d8devs\socialposter\Interfaces\ControllerInterace;
 class Controller extends Base implements ControllerInterace
 {
 
+    /**
+     * @param $data mixed
+     */
+    protected function prettyDebug($data)
+    {
+        echo '<pre>' . var_export($data, true) . '</pre>';
+    }
+
+    /**
+     * @param $url string
+     */
+    protected function redirect($url){
+        header("Location: ".$url);
+    }
 }

@@ -31,6 +31,7 @@ class IndexController extends Controller
             $formattedPostRequest = $this->formatPostRequest($_POST);
             $files = $this->uploadFiles($_FILES['files']);
             $this->createPosts($formattedPostRequest, $files);
+            $this->redirect('index.php?page=queue');
         }
 
         $this->render('index', [

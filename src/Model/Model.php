@@ -14,20 +14,17 @@ use d8devs\socialposter\Database;
 class Model extends Base
 {
     /**
-     * @var \PDO
-     */
-    protected $db;
-
-    /**
      * @var string Table
      */
     public $table;
-
     /**
      * @var array Columuns
      */
     public $columns = array();
-
+    /**
+     * @var \PDO
+     */
+    protected $db;
     /**
      * @var array Columns Schema
      * Example: ['columnName' => 'columnValue']
@@ -71,7 +68,7 @@ class Model extends Base
 
         try {
             foreach ($where as $key => &$value) {
-                $stmt->bindParam(':'.$key, $value);
+                $stmt->bindParam(':' . $key, $value);
             }
 
             $stmt->execute();
@@ -80,6 +77,30 @@ class Model extends Base
         } catch (\PDOException $e) {
             echo $e->getMessage();
         }
+    }
+
+    /**
+     * @param $where string
+     * @return string
+     */
+    private function generateSelectQuery($where = array())
+    {
+
+        $query = "SELECT * FROM " . $this->table;
+
+        if ($where) {
+            $changeArrayKeys = array();
+            foreach ($where as $key => $value) {
+                $changeArrayKeys[$key . " = :" . $key . " AND"] = $value;
+            }
+
+            $valueString = implode(', ', array_keys($changeArrayKeys));
+            $valueString = rtrim($valueString, ' AND');
+
+            $query .= " WHERE {$valueString}";
+        }
+
+        return $query;
     }
 
     public function getOne($where = array())
@@ -93,7 +114,7 @@ class Model extends Base
 
         try {
             foreach ($where as $key => &$value) {
-                $stmt->bindParam(':'.$key, $value);
+                $stmt->bindParam(':' . $key, $value);
             }
 
             $stmt->execute();
@@ -107,17 +128,29 @@ class Model extends Base
         }
     }
 
-
     /**
-     * @param $name
-     * @param $value
+     * @param $where string
+     * @return string
      */
-    public function __set($name, $value)
+    private function generateSelectOneQuery($where = array())
     {
-        if ($value) {
-            $this->columns[$name] = $value;
-            $this->formattedColumns[$name] = $value;
+
+        $query = "SELECT * FROM " . $this->table;
+
+        if ($where) {
+            $changeArrayKeys = array();
+            foreach ($where as $key => $value) {
+                $changeArrayKeys[$key . " = :" . $key . " AND"] = $value;
+            }
+
+            $valueString = implode(', ', array_keys($changeArrayKeys));
+            $valueString = rtrim($valueString, ' AND');
+
+            $query .= " WHERE {$valueString} ";
         }
+
+        $query .= "LIMIT 1";
+        return $query;
     }
 
     /**
@@ -132,21 +165,14 @@ class Model extends Base
     }
 
     /**
-     *  Save to DB
+     * @param $name
+     * @param $value
      */
-    public function save()
+    public function __set($name, $value)
     {
-        $query =  $this->generateInsertQuery();
-
-        $stmt = $this->db->prepare($query);
-
-        try {
-            foreach ($this->getFormattedColumns() as $key => &$value) {
-                $stmt->bindParam(':'.$key, $value);
-            }
-            $stmt->execute();
-        } catch (\PDOException $e) {
-            echo $e->getMessage();
+        if ($value) {
+            $this->columns[$name] = $value;
+            $this->formattedColumns[$name] = $value;
         }
     }
 
@@ -157,92 +183,12 @@ class Model extends Base
 
         try {
             foreach ($this->getFormattedColumns() as $key => &$value) {
-                $stmt->bindParam(':'.$key, $value);
+                $stmt->bindParam(':' . $key, $value);
             }
             $stmt->execute();
         } catch (\PDOException $e) {
             echo $e->getMessage();
         }
-    }
-
-    /**
-     * Format $column array
-     *
-     * @return array
-     */
-    public function getFormattedColumns(): array
-    {
-        return $this->formattedColumns;
-    }
-
-    /**
-     * Insert Query
-     *
-     * @return string
-     */
-    private function generateInsertQuery()
-    {
-        $columns = $this->getFormattedColumns();
-
-        $changeArrayKeys = array();
-        foreach ($columns as $key => $value) {
-            $changeArrayKeys[":".$key] = $value;
-        }
-
-        $columnString = implode(', ', array_keys($columns));
-        $valueString = implode(', ', array_keys($changeArrayKeys));
-
-        return "INSERT INTO ".$this->table." ({$columnString}) VALUES ({$valueString})";
-    }
-
-    /**
-     * @param $where string
-     * @return string
-     */
-    private function generateSelectQuery($where = array())
-    {
-
-        $query = "SELECT * FROM ".$this->table;
-        
-        if ($where) {
-            $changeArrayKeys = array();
-            foreach ($where as $key => $value) {
-                $changeArrayKeys[$key." = :".$key." AND"] = $value;
-            }
-
-            $valueString = implode(', ', array_keys($changeArrayKeys));
-            $valueString = rtrim($valueString, ' AND');
-
-            $query .= " WHERE {$valueString}";
-        }
-
-        return $query;
-    }
-
-
-    /**
-     * @param $where string
-     * @return string
-     */
-    private function generateSelectOneQuery($where = array())
-    {
-
-        $query = "SELECT * FROM ".$this->table;
-
-        if ($where) {
-            $changeArrayKeys = array();
-            foreach ($where as $key => $value) {
-                $changeArrayKeys[$key." = :".$key." AND"] = $value;
-            }
-
-            $valueString = implode(', ', array_keys($changeArrayKeys));
-            $valueString = rtrim($valueString, ' AND');
-
-            $query .= " WHERE {$valueString} ";
-        }
-
-        $query .= "LIMIT 1";
-        return $query;
     }
 
     /**
@@ -258,11 +204,72 @@ class Model extends Base
             if ($key == 'id') {
                 continue;
             }
-            $changeArrayKeys[$key." = :".$key] = $value;
+            $changeArrayKeys[$key . " = :" . $key] = $value;
         }
 
         $columnString = implode(', ', array_keys($changeArrayKeys));
 
-        return "UPDATE ".$this->table." SET {$columnString} WHERE id = :id";
+        return "UPDATE " . $this->table . " SET {$columnString} WHERE id = :id";
+    }
+
+    /**
+     * Format $column array
+     *
+     * @return array
+     */
+    public function getFormattedColumns(): array
+    {
+        return $this->formattedColumns;
+    }
+
+    public function remove()
+    {
+        $query = "DELETE FROM " . $this->table . " WHERE id=:id";
+        $stmt = $this->db->prepare($query);
+        try {
+            $stmt->bindParam(':id', $this->id);
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     *  Save to DB
+     */
+    public function save()
+    {
+        $query = $this->generateInsertQuery();
+
+        $stmt = $this->db->prepare($query);
+
+        try {
+            foreach ($this->getFormattedColumns() as $key => &$value) {
+                $stmt->bindParam(':' . $key, $value);
+            }
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * Insert Query
+     *
+     * @return string
+     */
+    private function generateInsertQuery()
+    {
+        $columns = $this->getFormattedColumns();
+
+        $changeArrayKeys = array();
+        foreach ($columns as $key => $value) {
+            $changeArrayKeys[":" . $key] = $value;
+        }
+
+        $columnString = implode(', ', array_keys($columns));
+        $valueString = implode(', ', array_keys($changeArrayKeys));
+
+        return "INSERT INTO " . $this->table . " ({$columnString}) VALUES ({$valueString})";
     }
 }

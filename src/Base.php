@@ -82,13 +82,6 @@ class Base extends Database
         }
     }
 
-    /**
-     * @param $data
-     */
-    protected function prettyDebug($data)
-    {
-        echo '<pre>' . var_export($data, true) . '</pre>';
-    }
 
     /**
      * Return Class Name

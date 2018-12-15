@@ -43,7 +43,8 @@
 
                 </tbody>
             </table>
-            <a href="index.php?page=run" class="btn btn-primary btn-lg active"
+
+            <a href="index.php?page=run" class="btn btn-primary btn-sm active"
                role="button" aria-pressed="true">Start Sending</a>
 
         <?php endif; ?>
