@@ -10,8 +10,23 @@ Social Poster is a simple Post with Images/Videos/File sender for Multi Accounts
   - Text with Image-\s Posting for Multiple Pages and Accounts
 
 # Screenshots
-![Screenshot](https://i.ibb.co/YcGvnt9/Screens.png)
+Home
 
+![Home](https://i.ibb.co/pfMDSWS/Home.png)
+
+Queue
+
+![Queue](https://i.ibb.co/fF3JJFV/Queue.png)
+
+Success
+
+![Success](https://i.ibb.co/0n0m95q/Success.png)
+
+Error
+
+![Error](https://i.ibb.co/HzHGMyC/Error.png)
+
+ 
 # New Features?
 
   - Please create new Issue.
@@ -74,6 +89,7 @@ Twitter
 ### Todos
 
  - Write Tests
+ - Admin Page
 
 ### Tests & Coding standard
 
