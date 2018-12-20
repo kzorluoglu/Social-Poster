@@ -20,12 +20,6 @@ class QueueControllerTest extends TestCase
     /** @var QueueController */
     private $controller;
 
-
-    protected function setUp()
-    {
-        $this->controller = new QueueController();
-    }
-
     public function testTwitterSend()
     {
 
@@ -40,12 +34,12 @@ class QueueControllerTest extends TestCase
         $post->for = 'twitter_account';
         $post->target = serialize($createdSender->columns);
         $post->message = 'Test Twitt';
+        $post->link = null;
 
         $sendedPost = $this->controller->send($post);
 
         $this->assertSame($sendedPost, ['response' => null, 'error' => 'Invalid or expired token.']);
     }
-
 
     public function testFacebookSend()
     {
@@ -60,9 +54,15 @@ class QueueControllerTest extends TestCase
         $post->for = 'facebook_page';
         $post->target = serialize($createdSender->columns);
         $post->message = 'Test Facebook Post';
+        $post->link = null;
 
         $sendedPost = $this->controller->send($post);
 
         $this->assertSame($sendedPost, ['response' => null, 'error' => 'Invalid OAuth access token.']);
+    }
+
+    protected function setUp()
+    {
+        $this->controller = new QueueController();
     }
 }

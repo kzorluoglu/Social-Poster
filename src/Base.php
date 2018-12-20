@@ -1,4 +1,5 @@
 <?php
+
 namespace d8devs\socialposter;
 
 use d8devs\socialposter\Controller\AdminController;
@@ -18,14 +19,16 @@ class Base extends Database
      * @var string
      */
     public $env;
-
-    /** @var IndexController */
-    private $pageController;
-
     /**
      * @var \PDO
      */
     protected $db;
+    /** @var IndexController */
+    private $pageController;
+    /**
+     * @var string
+     */
+    private $page;
 
     /**
      * Run Index Controller
@@ -35,27 +38,43 @@ class Base extends Database
         $db = parent::getInstance();
         $this->db = $db->getConnection();
 
-        $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_SPECIAL_CHARS);
+        $this->setPage(filter_input(INPUT_GET, 'page', FILTER_SANITIZE_SPECIAL_CHARS));
 
-        if ($page == '' || $page == 'home') {
+        if ($this->getPage() == '' || $this->getPage() == 'home') {
             $this->pageController = new IndexController();
             $this->pageController->index();
         }
 
-        if ($page == 'queue') {
+        if ($this->getPage() == 'queue') {
             $this->pageController = new QueueController();
             $this->pageController->index();
         }
 
-        if ($page == 'run') {
+        if ($this->getPage() == 'run') {
             $this->pageController = new QueueController();
             $this->pageController->run();
         }
 
-        if ($page == 'admin') {
+        if ($this->getPage() == 'admin') {
             $this->pageController = new AdminController();
             $this->pageController->index();
         }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * @param string|null $page
+     */
+    public function setPage($page): void
+    {
+        $this->page = $page;
     }
 
     /**
@@ -69,19 +88,18 @@ class Base extends Database
 
 
         if (file_exists($path)) {
-             extract($data);
+            extract($data);
 
             //Starts output buffering
             ob_start();
 
-             include $path;
+            include $path;
             $buffer = ob_get_contents();
             @ob_end_clean();
 
-             echo $buffer;
+            echo $buffer;
         }
     }
-
 
     /**
      * Return Class Name

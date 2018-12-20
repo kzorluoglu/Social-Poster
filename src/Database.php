@@ -1,4 +1,5 @@
 <?php
+
 namespace d8devs\socialposter;
 
 use PDO;
@@ -18,12 +19,37 @@ class Database
 
     public static function getInstance()
     {
-        if (! self::$instance) { // If no instance then make one
+        if (!self::$instance) { // If no instance then make one
             self::$instance = new self();
         }
         return self::$instance;
     }
 
+    /**
+     *
+     * @return PDO
+     */
+    public function getConnection()
+    {
+
+        try {
+            if (CURRENT_ENV == 'test') {
+                $this->connection = new PDO('sqlite::memory:');
+            }
+            if (CURRENT_ENV == 'development') {
+                $this->connection = new PDO('sqlite:' . __DIR__ . '/Database/database.sqlite3');
+            }
+            if (CURRENT_ENV == 'production') {
+                $this->connection = new PDO('sqlite:' . __DIR__ . '/Database/database.sqlite3');
+            }
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->createTables();
+        } catch (\Exception $e) {
+            die($e->getMessage());
+        }
+
+        return $this->connection;
+    }
 
     private function createTables()
     {
@@ -32,6 +58,7 @@ class Database
             for TEXT,
             target INTEGER,
             message TEXT,
+            link TEXT,
             attachments TEXT,
             status INTEGER,
             report TEXT,
@@ -68,31 +95,5 @@ class Database
             password TEXT,
             created_at TEXT
         )");
-    }
-
-    /**
-     *
-     * @return PDO
-     */
-    public function getConnection()
-    {
-
-        try {
-            if (CURRENT_ENV == 'test') {
-                $this->connection = new PDO('sqlite::memory:');
-            }
-            if (CURRENT_ENV == 'development') {
-                $this->connection = new PDO('sqlite:' . __DIR__ . '/Database/database.sqlite3');
-            }
-            if (CURRENT_ENV == 'production') {
-                $this->connection = new PDO('sqlite:' . __DIR__ . '/Database/database.sqlite3');
-            }
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->createTables();
-        } catch (\Exception $e) {
-            die($e->getMessage());
-        }
-
-        return $this->connection;
     }
 }
