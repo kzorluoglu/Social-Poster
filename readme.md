@@ -1,7 +1,7 @@
 # Social Poster 
 Master [![Build Status](https://travis-ci.com/kzorluoglu/Social-Poster.svg?branch=master)](https://travis-ci.com/kzorluoglu/socialposter)
 
-v2-develop [![Build Status](https://travis-ci.com/kzorluoglu/Social-Poster.svg?branch=v2-develop)](https://travis-ci.com/kzorluoglu/Social-Poster)
+develop [![Build Status](https://travis-ci.com/kzorluoglu/Social-Poster.svg?branch=develop)](https://travis-ci.com/kzorluoglu/Social-Poster)
 
 
 Social Poster is a simple Post with Images/Videos/File sender for Multi Accounts/Pages (Facebook Pages and Twitter Accounts)
