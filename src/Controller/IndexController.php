@@ -41,6 +41,43 @@ class IndexController extends Controller
         ]);
     }
 
+    public function formatPostRequest(array $posts)
+    {
+        $formattedPosts = array();
+        for ($i = 0; $i < count($posts['facebook_page']); $i++) {
+            $formattedPosts[] = array(
+                'for' => 'facebook_page',
+                'target' => $posts['facebook_page'][$i],
+                'message' => $posts['message'],
+                'link' => $posts['link']
+            );
+        }
+        for ($i = 0; $i < count($posts['twitter_account']); $i++) {
+            $formattedPosts[] = array(
+                'for' => 'twitter_account',
+                'target' => $posts['twitter_account'][$i],
+                'message' => $posts['message'],
+                'link' => $posts['link']
+            );
+        }
+        for ($i = 0; $i < count($posts['instagram_account']); $i++) {
+            $formattedPosts[] = array(
+                'for' => 'instagram_account',
+                'target' => $posts['instagram_account'][$i],
+                'message' => $posts['message'],
+                'link' => $posts['link']
+            );
+        }
+        return $formattedPosts;
+    }
+
+    public function uploadFiles(array $files)
+    {
+        $upload = new Upload($files);
+        $upload->uploadFiles();
+        return $upload->getUploadedFiles();
+    }
+
     private function createPosts($formattedPostRequest, $files)
     {
 
@@ -67,45 +104,11 @@ class IndexController extends Controller
 
             $newPost->target = serialize($target->columns);
             $newPost->message = $post['message'];
+            $newPost->link = $post['link'];
             $newPost->attachments = serialize($files);
             $newPost->created_at = strtotime('now');
             $newPost->status = "created";
             $newPost->save();
         }
-    }
-
-
-    public function formatPostRequest(array $posts)
-    {
-        $formattedPosts = array();
-        for ($i = 0; $i < count($posts['facebook_page']); $i++) {
-            $formattedPosts[] = array(
-                'for' => 'facebook_page',
-                'target' => $posts['facebook_page'][$i],
-                'message' => $posts['message']
-            );
-        }
-        for ($i = 0; $i < count($posts['twitter_account']); $i++) {
-            $formattedPosts[] = array(
-                'for' => 'twitter_account',
-                'target' => $posts['twitter_account'][$i],
-                'message' => $posts['message']
-            );
-        }
-        for ($i = 0; $i < count($posts['instagram_account']); $i++) {
-            $formattedPosts[] = array(
-                'for' => 'instagram_account',
-                'target' => $posts['instagram_account'][$i],
-                'message' => $posts['message']
-            );
-        }
-        return $formattedPosts;
-    }
-
-    public function uploadFiles(array $files)
-    {
-        $upload = new Upload($files);
-        $upload->uploadFiles();
-        return $upload->getUploadedFiles();
     }
 }

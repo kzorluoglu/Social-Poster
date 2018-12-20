@@ -1,4 +1,5 @@
 <?php
+
 namespace d8devs\socialposter\tests\Controller;
 
 use PHPUnit\Framework\TestCase;
@@ -15,6 +16,7 @@ class IndexControllerTest extends TestCase
     /** @var array Fake $_POST Request */
     private $fakePOST = array(
         'message' => 'test',
+        'link' => null,
         'facebook_page' => array(
             0 => 1,
             1 => 2
@@ -55,12 +57,6 @@ class IndexControllerTest extends TestCase
     /** @var IndexController */
     private $controller;
 
-    protected function setUp()
-    {
-
-        $this->controller = new IndexController();
-    }
-
     public function testformatPostRequest()
     {
         $posts = $this->controller->formatPostRequest($this->fakePOST);
@@ -68,5 +64,11 @@ class IndexControllerTest extends TestCase
         $this->assertSame($this->fakePOST['facebook_page'][0], $posts[0]['target']);
         $this->assertSame($this->fakePOST['twitter_account'][0], $posts[3]['target']);
         $this->assertSame($this->fakePOST['instagram_account'][1], $posts[4]['target']);
+    }
+
+    protected function setUp()
+    {
+
+        $this->controller = new IndexController();
     }
 }

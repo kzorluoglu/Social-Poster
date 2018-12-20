@@ -1,4 +1,5 @@
 <?php
+
 namespace d8devs\socialposter\Model;
 
 /**
@@ -7,6 +8,7 @@ namespace d8devs\socialposter\Model;
  * @property facebook_page|witter_account|instagram_account for
  * @property string target
  * @property string message
+ * @property string link
  * @property string attachments
  * @property string status
  * @property string report
@@ -22,6 +24,7 @@ class Post extends Model
         'for',
         'target',
         'message',
+        'link',
         'attachments',
         'status',
         'report',

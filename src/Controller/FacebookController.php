@@ -1,4 +1,5 @@
 <?php
+
 namespace d8devs\socialposter\Controller;
 
 use d8devs\socialposter\Model\FacebookPage;
@@ -39,7 +40,8 @@ class FacebookController
             try {
                 $this->response = $fb->sendRequest('POST', $target['page'] . "/feed", [
                     'message' => $post->message,
-                    'attached_media' => $this->imageUpload(unserialize($post->attachments), $fb, $target['page'])
+                    'attached_media' => $this->imageUpload(unserialize($post->attachments), $fb, $target['page']),
+                    'link' => $post->link
                 ]);
             } catch (\Exception $e) {
                 $this->error = $e->getMessage();
@@ -49,18 +51,19 @@ class FacebookController
 
         if (!unserialize($post->attachments)) {
             try {
-                $this->response =  $fb->sendRequest('POST', $target['page'] . "/feed", [
-                    'message' => $post->message
+                $this->response = $fb->sendRequest('POST', $target['page'] . "/feed", [
+                    'message' => $post->message,
+                    'link' => $post->link
                 ]);
             } catch (\Exception $e) {
-                $this->error =  $e->getMessage();
+                $this->error = $e->getMessage();
             }
         }
 
         return [
             'response' => $this->response,
             'error' => $this->error
-            ];
+        ];
     }
 
     /**
