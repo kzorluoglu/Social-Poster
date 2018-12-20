@@ -12,4 +12,3 @@ define('CURRENT_ENV', 'development');
 
 $base = new \d8devs\socialposter\Base();
 $base->run();
-?>

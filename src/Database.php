@@ -45,7 +45,7 @@ class Database
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->createTables();
         } catch (\Exception $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return $this->connection;

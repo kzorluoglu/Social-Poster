@@ -9,7 +9,7 @@ Social Poster is a simple Post with Images/Videos/File sender for Multi Accounts
   - Text Posting for Multiple Pages and Accounts
   - Text with Image-\s Posting for Multiple Pages and Accounts
 
-# Screenshots
+## Screenshots
 Home
 
 ![Home](https://i.ibb.co/pfMDSWS/Home.png)
@@ -31,27 +31,27 @@ Error
 ![Error](https://i.ibb.co/HzHGMyC/Error.png)
 
  
-# New Features?
+## New Features?
 
   - Please create new Issue.
 
-### Tech
+## Tech
 
 Social Poster uses a number of open source projects to work properly:
 
-* [facebook/graph-sdk] - Facebook SDK for PHP (v5)
-* [dg/twitter-php] - Twitter for PHP is a very small and easy-to-use library for sending messages to Twitter and receiving status updates.
-* [dillinger.io] - Markdown editor for this readme.md creating/editing. Fast and easy to extend.
-* [Twitter Bootstrap] - great UI boilerplate for modern web apps
-* [jQuery] - duh
+*   [facebook/graph-sdk] - Facebook SDK for PHP (v5)
+*   [dg/twitter-php] - Twitter for PHP is a very small and easy-to-use library for sending messages to Twitter and receiving status updates.
+*   [dillinger.io] - Markdown editor for this readme.md creating/editing. Fast and easy to extend.
+*   [Twitter Bootstrap] - great UI boilerplate for modern web apps
+*   [jQuery] - duh
 
-### Standarts
+## Standarts
 
-* PSR-2
+*   PSR-2
 
-### Installation
+## Installation
 
-1. Update **Uploads** Settings.
+1.  Update **Uploads** Settings.
 ```
 src\Helper\Upload.php
 ```
@@ -63,35 +63,35 @@ class Upload {
     ...
     protected $uploadDirectory = "/var/www/uploads/";
 ```
-2. Open Admin Page and add your Socail Media Accounts
+2.  Open Admin Page and add your Socail Media Accounts
     
-### Integration
+## Integration
 
 Facebook
- - Create Facebook Developer Account
- - Create Simple App
-    -  Fill **App Domains** and **Privacy Policy URL**  under **Settings -> Basic**
-    -  Call **https://developers.facebook.com/tools/explorer/**
-    -  Select **Your App** under **Application** Select
-    -  Select **Get User Access Token** under **Get Token** Button
-        - Select **manage_pages**, **pages_messaging**, **pages_show_list** Permissions from opened Pop-up
-        - Click then Get Access Token
-    -  Select Your Page from **Page Access Token** under **Get Token** Button
-    -  Click **i** icon after Access Token Creating
-    -  Click Open in **Access Token Tool** from **opened Pop-up**
-    -  Click **Generate Long Lived Token**
+    - Create Facebook Developer Account
+        - Create Simple App
+            - Fill **App Domains** and **Privacy Policy URL**  under **Settings -> Basic**
+            - Call **https://developers.facebook.com/tools/explorer/**
+            - Select **Your App** under **Application** Select
+            - Select **Get User Access Token** under **Get Token** Button
+                - Select **manage_pages**, **pages_messaging**, **pages_show_list** Permissions from opened Pop-up
+                - Click then Get Access Token
+            - Select Your Page from **Page Access Token** under **Get Token** Button
+            - Click **i** icon after Access Token Creating
+            - Click Open in **Access Token Tool** from **opened Pop-up**
+            - Click **Generate Long Lived Token**
 
 Twitter
- - Create Twitter Developer Account
- - Create App
-    - Click App Details 
-    -  This Keys will be located under **Keys and tokens** Menu
+    - Create Twitter Developer Account
+    - Create App
+        - Click App Details 
+        - This Keys will be located under **Keys and tokens** Menu
 
-### Todos
+## Todos
 
- - Write Tests
+1. Write Tests
 
-### Tests & Coding standard
+## Tests & Coding standard
 
 ```
 # Run PHPUnit

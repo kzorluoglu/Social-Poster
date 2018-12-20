@@ -46,10 +46,13 @@ class QueueController extends Controller
 
         if ($post) {
             $this->status = $this->send($post);
-        } else {
+        }
+        
+        if ($post == false) {
             $this->status['response'] = "All Created Posts sended";
             $this->status['error'] = null;
         }
+
         $this->render('queue/run', [
             'posts' => $posts,
             'status' => $this->status
