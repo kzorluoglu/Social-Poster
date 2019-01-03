@@ -1,6 +1,6 @@
 <?php
 
-namespace d8devs\socialposter\Model;
+namespace D8devs\Socialposter\Model;
 
 /**
  * Description of Post
@@ -16,7 +16,7 @@ namespace d8devs\socialposter\Model;
  * @property strtotime created_at
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class Post extends Model
+class Post
 {
     public $table = "posts";
 

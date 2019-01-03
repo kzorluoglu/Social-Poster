@@ -4,11 +4,6 @@ session_start();
 require_once 'vendor/autoload.php';
 
 
-/**
- * development|production|test
- */
+$response = new \D8devs\SocialPoster\Response();
+$response->render();
 
-define('CURRENT_ENV', 'development');
-
-$base = new \d8devs\socialposter\Base();
-$base->run();

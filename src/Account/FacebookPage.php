@@ -1,7 +1,6 @@
 <?php
-namespace d8devs\socialposter\Account;
 
-use d8devs\socialposter\Model\Facebook;
+namespace D8devs\SocialPoster\Account;
 
 /**
  * Description of FacebookPage

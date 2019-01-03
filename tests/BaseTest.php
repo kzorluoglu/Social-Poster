@@ -1,46 +1,32 @@
 <?php
 
-namespace d8devs\socialposter\tests;
+namespace D8devs\SocialPoster\Test;
 
-define('CURRENT_ENV', 'development');
+use PHPUnit\Framework\TestCase;
+use D8devs\SocialPoster\Base;
 
 /**
  * Description of BaseTest
  *
  * @author Koray Zorluoglu <koray@d8devs.com>
  */
-class BaseTest
+class BaseTest extends TestCase
 {
 
-    /** @var \d8devs\socialposter\Base */
+    /** @var \D8devs\SocialPoster\Base */
     protected $base;
 
-    public function testIndexController()
+    public function testAddNewClass()
     {
-        $this->base->run();
+        $this->base->register('D8devs\SocialPoster\Config');
 
-        $this->assertSame('d8devs\socialposter\Controller\IndexController', $this->base->getPageController());
+        $this->assertInstanceOf('D8devs\SocialPoster\Config', $this->base->Config);
     }
 
-    public function testQueueController()
+    public function testNotRegisteredClass()
     {
-        $this->base->setPage('queue');
 
-        $this->assertSame('d8devs\socialposter\Controller\QueueController', $this->base->getPageController());
-    }
-
-    public function testQueueRunController()
-    {
-        $this->base->setPage('queue');
-
-        $this->assertSame('d8devs\socialposter\Controller\QueueController', $this->base->getPageController());
-    }
-
-    public function testAdminController()
-    {
-        $this->base->setPage('queue');
-
-        $this->assertSame('d8devs\socialposter\Controller\AdminController', $this->base->getPageController());
+        $this->assertInstanceOf('Exception', $this->base->ThisNotExists);
     }
 
     protected function setUp()

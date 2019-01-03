@@ -1,11 +1,10 @@
 <?php
 
-namespace d8devs\socialposter;
+namespace D8devs\SocialPoster;
 
 use PDO;
-use phpDocumentor\Reflection\Types\Self_;
 
-class Database
+class Database extends Base
 {
 
     /**
@@ -33,13 +32,13 @@ class Database
     {
 
         try {
-            if (CURRENT_ENV == 'test') {
+            if ($this->Config->env == 'test') {
                 $this->connection = new PDO('sqlite::memory:');
             }
-            if (CURRENT_ENV == 'development') {
+            if ($this->Config->env == 'development') {
                 $this->connection = new PDO('sqlite:' . __DIR__ . '/Database/database.sqlite3');
             }
-            if (CURRENT_ENV == 'production') {
+            if ($this->Config->env == 'production') {
                 $this->connection = new PDO('sqlite:' . __DIR__ . '/Database/database.sqlite3');
             }
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

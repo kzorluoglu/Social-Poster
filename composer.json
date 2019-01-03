@@ -21,12 +21,12 @@
   },
   "autoload": {
     "psr-4": {
-      "d8devs\\socialposter\\": "src/"
+      "D8devs\\SocialPoster\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "d8devs\\socialposter\\ŧests\\": "tests/"
+      "D8devs\\SocialPoster\\Test\\": "tests/"
     }
   },
   "scripts": {

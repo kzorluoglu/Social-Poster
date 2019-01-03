@@ -6,12 +6,11 @@
  * Time: 11:03
  */
 
-namespace d8devs\socialposter\Model;
+namespace D8devs\Socialposter\Model;
 
-use d8devs\socialposter\Base;
-use d8devs\socialposter\Database;
+use D8devs\Socialposter\Database;
 
-class Model extends Base
+class Model
 {
     /**
      * @var string Table
@@ -53,7 +52,7 @@ class Model extends Base
             ':id' => $id
         ]);
 
-        return $query->fetchObject('d8devs\socialposter\Model\Post');
+        return $query->fetchObject(get_class($this));
     }
 
 
