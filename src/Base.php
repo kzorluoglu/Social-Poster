@@ -13,6 +13,7 @@ class Base
 {
 
     /**
+     * Base Controller
      * @var
      */
     private $base;
